@@ -7,6 +7,11 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    timer_to_ask.setInterval(1000);
+    timer_to_ask.start();
+
+    connect(&timer_to_ask, SIGNAL(timeout()), this, SLOT(sendAskWhoIsHere()));
+
     ui->setupUi(this);
     server_status = 0;
     tcpServer = NULL;
@@ -337,6 +342,10 @@ void MainWindow::readPacketUdp()
         players[j]->setArmor(armor);
         sendArmor(players[j]);
     }
+    else if (cmd == "I_AM_HERE")
+    {
+        players[j]->setOnline(true);
+    }
 }
 
 int MainWindow::searchPlayer(QHostAddress address, QString pl_name)
@@ -419,6 +428,54 @@ void MainWindow::sendArmor(Player *pl)
 
     //---!!!it is default settings!!!---
     sendEnd(data, out, pl);
+}
+void MainWindow::sendAskWhoIsHere()
+{
+    //delete all, who before this did not asked that he is online
+    for (int i = 0; i < players.size();)
+    {
+        if (!players[i]->getOnline())
+            removePlayerIp(players[i]->getIp().toString());
+        else
+            i++;
+    }
+
+    //reset status of all players
+    for (int i = 0; i < players.size(); i++)
+        players[i]->setOnline(false);
+
+    //---!!!it is default settings!!!---
+    QByteArray data;
+    QDataStream out(&data, QIODevice::WriteOnly);
+
+    out << qint64(0);
+    out << QString::fromStdString("SERVER");
+    out << QString::fromStdString("WHO_IS_HERE");
+
+    //---!!!it is default settings!!!---
+    out.device()->seek(qint64(0));
+    out << qint64(data.size() - sizeof(qint64));
+    for (int i = 0; i < players.size(); i++)
+        socServer->writeDatagram(data, players[i]->getIp(), this->udp_p_port);
+}
+void MainWindow::sendPlayerWhoIsHere()
+{
+    //---!!!it is default settings!!!---
+    QByteArray data;
+    QDataStream out(&data, QIODevice::WriteOnly);
+
+    out << qint64(0);
+    out << QString::fromStdString("SERVER");
+    out << QString::fromStdString("NICKS_WHO_HERE");
+
+    for (int i = 0; i < players.size(); i++)
+        out << players[i]->getName();
+
+    //---!!!it is default settings!!!---
+    out.device()->seek(qint64(0));
+    out << qint64(data.size() - sizeof(qint64));
+    for (int i = 0; i < players.size(); i++)
+        socServer->writeDatagram(data, players[i]->getIp(), this->udp_p_port);
 }
 //-----------------------------------------------------
 //----------SEND TO ALL PLAYERS FROM US-----------(END)

@@ -67,35 +67,35 @@ void Form::mouseMoveEvent(QMouseEvent *me)
 
 void Form::initializeGL()
 {
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//    glOrtho(-1, m_width-1, m_height-1, -1, 0.0f, 1.0f);
-//    qglClearColor(Qt::white);
+    //    glMatrixMode(GL_PROJECTION);
+    //    glLoadIdentity();
+    //    glOrtho(-1, m_width-1, m_height-1, -1, 0.0f, 1.0f);
+    //    qglClearColor(Qt::white);
 }
 
 void Form::resizeGL(int nWidth, int nHeight)
 {
-//    glViewport(0, 0, nWidth, nHeight);
+    //    glViewport(0, 0, nWidth, nHeight);
 }
 
 void Form::paintGL()
 {
-//    glClear(GL_COLOR_BUFFER_BIT); // чистим буфер изображения и буфер глубины
+    //    glClear(GL_COLOR_BUFFER_BIT); // чистим буфер изображения и буфер глубины
 
-//    geese(pl->getX(), pl->getY(), pl->getWidth(), pl->getHeight()); // Рисуем объект
-//    for (int i = 0; i < players.size(); i++)
-//        geese(players[i]->getX(), players[i]->getY(), players[i]->getWidth(), players[i]->getHeight());
+    //    geese(pl->getX(), pl->getY(), pl->getWidth(), pl->getHeight()); // Рисуем объект
+    //    for (int i = 0; i < players.size(); i++)
+    //        geese(players[i]->getX(), players[i]->getY(), players[i]->getWidth(), players[i]->getHeight());
 }
 
 void Form::geese(float x, float y, float w, float h)
 {
-//    glBegin(GL_POLYGON);
-//    glColor3f(0,0,1);
-//    glVertex2f((x - w)*cos(pl->getAngle()) + (y - h)*sin(pl->getAngle()), (x - w)*sin(pl->getAngle()) - (y - h)*cos(pl->getAngle()));
-//    glVertex2f((x - w)*cos(pl->getAngle()) + (y + h)*sin(pl->getAngle()), (x - w)*sin(pl->getAngle()) - (y + h)*cos(pl->getAngle()));
-//    glVertex2f((x + w)*cos(pl->getAngle()) + (y + h)*sin(pl->getAngle()), (x + w)*sin(pl->getAngle()) - (y + h)*cos(pl->getAngle()));
-//    glVertex2f((x + w)*cos(pl->getAngle()) + (y - h)*sin(pl->getAngle()), (x + w)*sin(pl->getAngle()) - (y - h)*cos(pl->getAngle()));
-//    glEnd();
+    //    glBegin(GL_POLYGON);
+    //    glColor3f(0,0,1);
+    //    glVertex2f((x - w)*cos(pl->getAngle()) + (y - h)*sin(pl->getAngle()), (x - w)*sin(pl->getAngle()) - (y - h)*cos(pl->getAngle()));
+    //    glVertex2f((x - w)*cos(pl->getAngle()) + (y + h)*sin(pl->getAngle()), (x - w)*sin(pl->getAngle()) - (y + h)*cos(pl->getAngle()));
+    //    glVertex2f((x + w)*cos(pl->getAngle()) + (y + h)*sin(pl->getAngle()), (x + w)*sin(pl->getAngle()) - (y + h)*cos(pl->getAngle()));
+    //    glVertex2f((x + w)*cos(pl->getAngle()) + (y - h)*sin(pl->getAngle()), (x + w)*sin(pl->getAngle()) - (y - h)*cos(pl->getAngle()));
+    //    glEnd();
 }
 //--------------------------------
 //----------OPENGL-----------(END)
@@ -112,6 +112,9 @@ void Form::send(int cmd)
 
     switch(cmd)
     {
+    case 0:
+        sendBegin(out, "I_AM_HERE");
+        break;
     case 1:
         sendBegin(out, "NEW_POSITION");
         sendPosition(out);
@@ -210,6 +213,12 @@ void Form::readMessage()
 
     in >> pl_name;
     in >> cmd;
+
+    if (cmd == QString::fromStdString("WHO_IS_HERE") && pl_name == QString::fromStdString("SERVER"))
+    {
+        send(0);
+        return;
+    }
 
     //search id of players, who sent message
     //if he have not in list, they add to this and set id as last

@@ -22,18 +22,21 @@ public:
     void setArmor(const int);
     void setWidth(const float);
     void setHeight(const float);
+    void setOnline(const bool);
 
-    const QString getName()const{return this->name;}
-    const QHostAddress getIp()const{return this->ip;}
-    const float getX()const{return this->x;}
-    const float getY()const{return this->y;}
-    const float getAngle()const{return this->angle;}
-    const int getHealth()const{return this->health;}
-    const int getArmor()const{return this->armor;}
-    const float getWidth()const{return this->width;}
-    const float getHeight()const{return this->height;}
+    inline const QString getName()const{return this->name;}
+    inline const QHostAddress getIp()const{return this->ip;}
+    inline float getX()const{return this->x;}
+    inline float getY()const{return this->y;}
+    inline float getAngle()const{return this->angle;}
+    inline int getHealth()const{return this->health;}
+    inline int getArmor()const{return this->armor;}
+    inline float getWidth()const{return this->width;}
+    inline float getHeight()const{return this->height;}
+    inline bool getOnline()const{return this->online;}
 
 private:
+    bool online;
     QHostAddress ip;//ip of player
     QString name;//player's name
     float x;//position (x) of player

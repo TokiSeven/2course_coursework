@@ -8,6 +8,7 @@
 #include <client.h>
 #include <QUdpSocket>
 #include "player.h"
+#include <QTimer>
 
 struct s_login_pass
 {
@@ -29,6 +30,7 @@ public:
     void update();//update GUI
     bool checkAuth(const QString, const QString);//check authorization
     int searchPlayer(QHostAddress, QString);
+
     //need for resend to players
     void sendPosition(Player*);//do it, if player move
     void sendAngle(Player*);//do it, if player change his angle
@@ -36,6 +38,8 @@ public:
     void sendArmor(Player*);//do it, if player change armor
     void sendBegin(QDataStream&, QString, Player*);//need for more better code
     void sendEnd(QByteArray&, QDataStream&, Player*);//need for more better code
+    void sendPlayerWhoIsHere();
+
     //remove players from launcher & game
     void removePlayerIp(QString);
 
@@ -57,6 +61,8 @@ private:
     QString tcp_s_ip;//server ip for tcp connection
     QString udp_s_ip;//server ip for udp connection
 
+    QTimer timer_to_ask;//timer for sending to players message "who are here?"
+
 private slots:
     void newUser();//connect new user from tcp
     void on_button_stop_server_clicked();//stop server
@@ -65,6 +71,7 @@ private slots:
     void readPacketUdp();//read info from game player
     void readInfoFromClient();//some message from client's launcher
     void disconnectClient();//disc clients (tcp)
+    void sendAskWhoIsHere();
 };
 
 #endif // MAINWINDOW_H
