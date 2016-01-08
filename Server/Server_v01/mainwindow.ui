@@ -27,6 +27,16 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Ip of the server</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="line_server_ip"/>
+        </item>
+        <item>
          <widget class="QLabel" name="text_info">
           <property name="text">
            <string>Number of connetion:</string>
