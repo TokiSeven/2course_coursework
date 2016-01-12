@@ -7,6 +7,8 @@
 #include <QString>
 #include <QHostAddress>
 
+enum COMMAND {_online, _position, _armor, _health, _angle, _login};
+
 class Player
 {
 public:

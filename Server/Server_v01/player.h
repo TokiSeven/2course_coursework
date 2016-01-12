@@ -37,6 +37,29 @@ public:
     inline float getHeight()const{return this->height;}
     inline bool getOnline()const{return this->online;}
 
+    static QString _CMD(COMMAND cmd)
+    {
+        switch(cmd)
+        {
+        case _online: return "_online";
+        case _position: return "_position";
+        case _armor: return "_armor";
+        case _health: return "_health";
+        case _angle: return "_angle";
+        case _login: return "_login";
+        }
+    }
+
+    static COMMAND _CMD(QString cmd)
+    {
+        if (cmd == QString::fromStdString("_online")) return _online;
+        if (cmd == QString::fromStdString("_position")) return _position;
+        if (cmd == QString::fromStdString("_armor")) return _armor;
+        if (cmd == QString::fromStdString("_health")) return _health;
+        if (cmd == QString::fromStdString("_angle")) return _angle;
+        if (cmd == QString::fromStdString("_login")) return _login;
+    }
+
 private:
     bool online;
     QHostAddress ip;//ip of player
