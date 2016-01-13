@@ -16,11 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     form.cpp \
     player.cpp \
-    launcher.cpp
+    launcher.cpp \
+    container.cpp \
+    game_net.cpp
 
 HEADERS  += mainwindow.h \
     form.h \
     player.h \
-    launcher.h
+    launcher.h \
+    container.h \
+    game_net.h
 
 FORMS    += mainwindow.ui

@@ -2,6 +2,7 @@
 
 Player::Player(QHostAddress ip, QString name, float x, float y, float angle, int health, int armor)
 {
+    this->setOnline(true);
     this->setIp(ip);
     this->setName(name);
     this->setX(x);
@@ -11,6 +12,11 @@ Player::Player(QHostAddress ip, QString name, float x, float y, float angle, int
     this->setArmor(armor);
     this->setWidth(10);
     this->setHeight(10);
+}
+
+void Player::setOnline(bool fl)
+{
+    this->online = fl;
 }
 
 void Player::setWidth(const float w)
