@@ -15,16 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     form.cpp \
-    player.cpp \
     launcher.cpp \
     container.cpp \
-    game_net.cpp
+    game_net.cpp \
+    ../../Server/Server_v01/player.cpp
 
 HEADERS  += mainwindow.h \
     form.h \
-    player.h \
     launcher.h \
     container.h \
-    game_net.h
+    game_net.h \
+    ../../Server/Server_v01/player.h
 
 FORMS    += mainwindow.ui

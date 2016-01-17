@@ -4,15 +4,16 @@
 #define toRADIAN(angle) (M_PI * angle / 180)
 #define toDEGREE(x) (x * 180 / M_PI)
 
+#include <QObject>
 #include <QString>
 #include <QHostAddress>
 
 enum COMMAND {_online, _position, _armor, _health, _angle, _login};
 
-class Player
+class Player : public QObject
 {
 public:
-    Player(QHostAddress ip, QString name, float x = rand() % 100, float y = rand() % 100, float angle = 0, int health = 100, int armor = 100);
+    Player(QHostAddress ip, QString name, float x = rand() % 100, float y = rand() % 100, float angle = 0, int health = 100, int armor = 100, QObject *parent = 0);
     ~Player();
 
     void setName(const QString);
@@ -60,9 +61,16 @@ public:
         if (cmd == QString::fromStdString("_login")) return _login;
     }
 
+signals:
+    void changed_position();
+    void changed_health();
+    void changed_armor();
+    void changed_angle();
+    void changed_fire();
+
 private:
     bool online;
-    QHostAddress ip;//ip of player
+    QHostAddress ip;//ip of the player
     QString name;//player's name
     float x;//position (x) of player
     float y;//position (y) of player

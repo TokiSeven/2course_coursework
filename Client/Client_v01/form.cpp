@@ -59,31 +59,31 @@ void Form::mouseMoveEvent(QMouseEvent *me)
 }
 
 void Form::initializeGL()
-{
+{/*
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     glOrtho(-1, m_width-1, m_height-1, -1, 0.0f, 1.0f);
-    qglClearColor(Qt::white);
+    qglClearColor(Qt::white);*/
 }
 
 void Form::resizeGL(int nWidth, int nHeight)
-{
-    glViewport(0, 0, nWidth, nHeight);
+{/*
+    glViewport(0, 0, nWidth, nHeight);*/
 }
 
 void Form::paintGL()
-{
+{/*
     Player *pl = cont->getPlayer_current();
     QList<Player*> players = cont->getPlayer_all();
     glClear(GL_COLOR_BUFFER_BIT); // чистим буфер изображения и буфер глубины
 
     geese(pl->getX(), pl->getY(), pl->getWidth(), pl->getHeight()); // Рисуем объект
     for (int i = 0; i < players.size(); i++)
-        geese(players[i]->getX(), players[i]->getY(), players[i]->getWidth(), players[i]->getHeight());
+        geese(players[i]->getX(), players[i]->getY(), players[i]->getWidth(), players[i]->getHeight());*/
 }
 
 void Form::geese(float x, float y, float w, float h)
-{
+{/*
     Player *pl = cont->getPlayer_current();
     glBegin(GL_POLYGON);
     glColor3f(0,0,1);
@@ -91,7 +91,7 @@ void Form::geese(float x, float y, float w, float h)
     glVertex2f((x - w)*cos(pl->getAngle()) + (y + h)*sin(pl->getAngle()), (x - w)*sin(pl->getAngle()) - (y + h)*cos(pl->getAngle()));
     glVertex2f((x + w)*cos(pl->getAngle()) + (y + h)*sin(pl->getAngle()), (x + w)*sin(pl->getAngle()) - (y + h)*cos(pl->getAngle()));
     glVertex2f((x + w)*cos(pl->getAngle()) + (y - h)*sin(pl->getAngle()), (x + w)*sin(pl->getAngle()) - (y - h)*cos(pl->getAngle()));
-    glEnd();
+    glEnd();*/
 }
 //--------------------------------
 //----------OPENGL-----------(END)

@@ -1,6 +1,7 @@
 #include "player.h"
 
-Player::Player(QHostAddress ip, QString name, float x, float y, float angle, int health, int armor)
+Player::Player(QHostAddress ip, QString name, float x, float y, float angle, int health, int armor, QObject *parent)
+    : QObject(parent)
 {
     this->setOnline(true);
     this->setIp(ip);
