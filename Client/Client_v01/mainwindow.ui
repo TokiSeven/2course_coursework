@@ -33,10 +33,24 @@
           </property>
          </widget>
         </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="layout_auth">
         <item>
-         <widget class="QPushButton" name="button_connect">
+         <widget class="QLabel" name="label_info_nick">
           <property name="text">
-           <string>Connect</string>
+           <string>Please, write your nickname:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="line_nick"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_auth">
+          <property name="text">
+           <string/>
           </property>
          </widget>
         </item>
@@ -60,35 +74,14 @@
         </item>
        </layout>
       </item>
-      <item>
-       <layout class="QHBoxLayout" name="layout_auth">
-        <item>
-         <widget class="QLabel" name="label_info_nick">
-          <property name="text">
-           <string>Please, write your nickname:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="line_nick"/>
-        </item>
-        <item>
-         <widget class="QPushButton" name="button_auth">
-          <property name="text">
-           <string>Check and Play</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_auth">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
      </layout>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="button_connect">
+      <property name="text">
+       <string>Connect and play</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

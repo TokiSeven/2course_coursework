@@ -6,19 +6,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    soc = new QTcpSocket;
-    connect(soc, SIGNAL(readyRead()), this, SLOT(onSocReadyRead()));
-    connect(soc, SIGNAL(connected()), this, SLOT(onSocConnected()));
-    connect(soc, SIGNAL(disconnected()), this, SLOT(onSocDisconnected()));
-    connect(soc, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(onSocDisplayError(QAbstractSocket::SocketError)));
-
-    s_port = (quint16)1234;
-    s_ip = "192.168.199.3";//"25.107.188.21";//hamachi
-    //s_ip = "95.84.146.28";//my real ip
-
-    blockSize = 0;
-
-    connectToHost();
+    launch = new Launcher;
+    connect(launch, SIGNAL(connected()), this, SLOT(answerTrue()));
+    connect(launch, SIGNAL(disconnected()), this, SLOT(serverTimeout()));
+    connect(launch, SIGNAL(nick_incorrect()), this, SLOT(answerFalse()));
 }
 
 MainWindow::~MainWindow()
@@ -26,11 +17,27 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::startGame()
+void MainWindow::on_button_connect_clicked()
 {
-    gameWindow = new Form(this->login);
-    gameWindow->setWindowTitle("GameWindow");
-    gameWindow->setGeometry(100,100,500,500); // Смещение и положение окна
-    gameWindow->setServerAddress(QHostAddress(this->s_ip));
-    gameWindow->show();
+    launch->connectToServer(ui->line_server_ip->text(), ui->line_nick->text());
+    ui->label_status->setText(QString::fromStdString("Connecting..."));
+}
+
+void MainWindow::answerFalse()
+{
+    ui->label_status->setText(QString::fromStdString("Some errors. Please write other nickname or ip address of server."));
+}
+
+void MainWindow::answerTrue()
+{
+    ui->label_status->setText(QString::fromStdString("Starting the game..."));
+    ui->line_nick->setEnabled(false);
+    ui->line_server_ip->setEnabled(false);
+    ui->button_connect->setEnabled(false);
+    launch->startGame();
+}
+
+void MainWindow::serverTimeout()
+{
+    ui->label_status->setText(QString::fromStdString("Server don't response. Please, try again or write other server ip."));
 }

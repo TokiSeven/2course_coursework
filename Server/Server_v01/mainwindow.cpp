@@ -8,8 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    server = new Server("127.0.0.1");
-    ui->line_server_ip->setText("192.168.199.3");//"25.107.188.21";"95.84.146.28"
+    server = new Server();
 
     connect(server, SIGNAL(started()), this, SLOT(server_started()));
     connect(server, SIGNAL(stoped()), this, SLOT(server_stopped()));
@@ -30,7 +29,6 @@ void MainWindow::on_button_stop_server_clicked()
 
 void MainWindow::on_button_start_server_clicked()
 {
-    server->setIp(ui->line_server_ip->text());
     server->start();
 }
 
@@ -62,7 +60,6 @@ void MainWindow::server_started()
 {
     ui->button_start_server->setEnabled(false);
     ui->button_stop_server->setEnabled(true);
-    ui->line_server_ip->setEnabled(false);
     ui->list_debug->addItem("Server is started.");
     emit update_gui();
 }
@@ -71,7 +68,6 @@ void MainWindow::server_stopped()
 {
     ui->button_start_server->setEnabled(true);
     ui->button_stop_server->setEnabled(false);
-    ui->line_server_ip->setEnabled(true);
     ui->list_debug->addItem("Server is stopped.");
     emit update_gui();
 }

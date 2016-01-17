@@ -5,15 +5,14 @@
 #include <QtOpenGL>
 #include <QTimer>
 #include <QUdpSocket>
-#include "player.h"
+#include "container.h"
 
 class Form : public QGLWidget
 {
     Q_OBJECT
 
 public:
-    Form(QString player_name, QWidget* parent = 0);
-    //void getPlayers();//if they are online they do nothing, else they add new player to list
+    Form(Container *cont, QWidget* parent = 0);
 
 protected:
     //FOR OPENGL
@@ -31,13 +30,7 @@ private:
     int m_height;
 
     //db
-    Player *pl;
-    QList<Player*> *players;
-
-
-public slots:
-    void readMessage();
-
+    Container *cont;
 };
 
 #endif // FORM_H
