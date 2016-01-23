@@ -17,6 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+signals:
+    void signal_closed();
+
 private:
     Ui::MainWindow *ui;
     Launcher *launch;
@@ -26,6 +29,8 @@ private slots:
     void answerTrue();
     void answerFalse();
     void serverTimeout();
+    void closeEvent(QCloseEvent *);
+    void slot_game_close();
 
     //GUI
     void on_button_connect_clicked();

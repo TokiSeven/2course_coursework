@@ -8,6 +8,18 @@ Form::Form(Container *cont, QWidget* parent) : QGLWidget(parent)
     m_height = 500;
 }
 
+void Form::closeEvent(QCloseEvent *event)
+{
+    emit signal_closed();
+    event->accept();
+}
+
+void Form::slot_game_close()
+{
+    emit signal_closed();
+    this->close();
+}
+
 //----------------------------------
 //----------OPENGL-----------(BEGIN)
 //----------------------------------

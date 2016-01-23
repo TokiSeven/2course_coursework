@@ -18,7 +18,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void update();//update GUI
 
 private:
     Ui::MainWindow *ui;
@@ -28,6 +27,7 @@ signals:
     void update_gui();
 
 private slots:
+    void update();//update GUI
     void on_button_stop_server_clicked();//stop server
     void on_button_start_server_clicked();//start server
     void on_pushButton_clicked();//clear info

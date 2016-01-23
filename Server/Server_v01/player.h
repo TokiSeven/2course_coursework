@@ -14,7 +14,7 @@ class Player : public QObject
 {
 public:
     Player(QHostAddress ip, QString name, float x = rand() % 100, float y = rand() % 100, float angle = 0, int health = 100, int armor = 100, QObject *parent = 0);
-    ~Player();
+    //~Player();
 
     void setName(const QString);
     void setIp(const QHostAddress);

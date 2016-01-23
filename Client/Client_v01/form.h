@@ -14,6 +14,13 @@ class Form : public QGLWidget
 public:
     Form(Container *cont, QWidget* parent = 0);
 
+public slots:
+    void closeEvent(QCloseEvent *event);
+    void slot_game_close();
+
+signals:
+    void signal_closed();
+
 protected:
     //FOR OPENGL
     void initializeGL(); // Метод для инициализирования opengl
