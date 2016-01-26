@@ -7,9 +7,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     launch = new Launcher;
+
     connect(launch, SIGNAL(connected()), this, SLOT(answerTrue()));
     connect(launch, SIGNAL(disconnected()), this, SLOT(serverTimeout()));
     connect(launch, SIGNAL(nick_incorrect()), this, SLOT(answerFalse()));
+
+    connect(launch, SIGNAL(signal_closed()), this, SLOT(slot_game_close()));
+
+    connect(this, SIGNAL(signal_closed()), launch, SLOT(slot_game_close()));
 }
 
 MainWindow::~MainWindow()
@@ -40,4 +45,15 @@ void MainWindow::answerTrue()
 void MainWindow::serverTimeout()
 {
     ui->label_status->setText(QString::fromStdString("Server don't response. Please, try again or write other server ip."));
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    emit signal_closed();
+    event->accept();
+}
+
+void MainWindow::slot_game_close()
+{
+    this->close();
 }

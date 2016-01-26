@@ -13,10 +13,11 @@ class Form : public QGLWidget
 
 public:
     Form(Container *cont, QWidget* parent = 0);
+    ~Form();
 
 public slots:
-    void closeEvent(QCloseEvent *event);
     void slot_game_close();
+    void closeEvent(QCloseEvent *event);
 
 signals:
     void signal_closed();
