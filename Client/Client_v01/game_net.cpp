@@ -19,8 +19,8 @@ Game_net::Game_net(Container *cont, QObject *parent) : QObject(parent)
 Game_net::~Game_net()
 {
     emit signal_closed();
-    if (this)
-        delete this;
+//    if (this)
+//        delete this;
 }
 
 //                          ================================
@@ -132,6 +132,6 @@ void Game_net::checkData(QDataStream &in)
 void Game_net::slot_game_close()
 {
     emit signal_closed();
-    if (this)
-        delete this;
+//    if (this)
+//        delete this;
 }

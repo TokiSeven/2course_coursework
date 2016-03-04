@@ -12,13 +12,13 @@ Container::Container(QString pl_name, QHostAddress s_ip, quint16 s_port, quint16
 Container::~Container()
 {
     emit signal_closed();
-    if (this)
-        delete this;
+//    if (this)
+//        delete this;
 }
 
 void Container::slot_game_close()
 {
     emit signal_closed();
-    if (this)
-        delete this;
+//    if (this)
+//        delete this;
 }

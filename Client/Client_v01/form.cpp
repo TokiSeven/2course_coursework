@@ -14,8 +14,8 @@ Form::Form(Container *cont, QWidget* parent) : QGLWidget(parent)
 Form::~Form()
 {
     emit signal_closed();
-    if (this)
-        delete this;
+//    if (this)
+//        delete this;
 }
 
 void Form::closeEvent(QCloseEvent *event)
@@ -27,8 +27,9 @@ void Form::closeEvent(QCloseEvent *event)
 void Form::slot_game_close()
 {
     emit signal_closed();
-    if (this)
-        delete this;
+//    if (this)
+//        delete this;
+    this->close();
 }
 
 //----------------------------------

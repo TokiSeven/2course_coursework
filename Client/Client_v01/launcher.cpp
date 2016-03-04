@@ -13,8 +13,8 @@ Launcher::Launcher(quint16 serv_port, quint16 ln_port, QObject *parent) : QObjec
 Launcher::~Launcher()
 {
     emit signal_closed();
-    if (this)
-        delete this;
+//    if (this)
+//        delete this;
 }
 
 void Launcher::connectToServer(const QString serv_ip, QString pl_name)
@@ -96,6 +96,6 @@ void Launcher::readUdpDiagrams()
 void Launcher::slot_game_close()
 {
     emit signal_closed();
-    if (this)
-        delete this;
+//    if (this)
+//        delete this;
 }

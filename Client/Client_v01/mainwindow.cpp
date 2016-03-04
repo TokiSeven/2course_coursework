@@ -55,5 +55,5 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::slot_game_close()
 {
-    this->close();
+    //this->close();
 }
