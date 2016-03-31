@@ -100,6 +100,8 @@ void Game_graphic::slot_position(Player *player)
     int num = this->cont->getPlayer_all().indexOf(player);
     if (num == -1)//if didn't been finded in all players (it will be yourself)
         this->pl_current.setPosition(cont->getPlayer_current()->getX(), cont->getPlayer_current()->getY());
+    else if (num < cont->getPlayer_all().size())
+        this->pl_all[num].setPosition(cont->getPlayer_all()[num]->getX(), cont->getPlayer_all()[num]->getY());
 }
 //================================================================================================
 //==========================================SLOTS(FINISH)==========================================
