@@ -12,6 +12,7 @@ enum COMMAND {_online, _position, _armor, _health, _angle, _login};
 
 class Player : public QObject
 {
+    Q_OBJECT
 public:
     Player(QHostAddress ip, QString name, float x = rand() % 100, float y = rand() % 100, float angle = 0, int health = 100, int armor = 100, QObject *parent = 0);
     //~Player();
@@ -62,11 +63,11 @@ public:
     }
 
 signals:
-    void changed_position();
-    void changed_health();
-    void changed_armor();
-    void changed_angle();
-    void changed_fire();
+    void changed_position(Player*);
+    void changed_health(Player*);
+    void changed_armor(Player*);
+    void changed_angle(Player*);
+    void changed_fire(Player*);
 
 private:
     bool online;

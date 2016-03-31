@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "form.h"
+#include "game_graphic.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])

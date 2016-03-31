@@ -43,8 +43,9 @@ void Launcher::startGame()
 {
     cont = new Container(this->player_name, this->server_ip);
     game_net = new Game_net(cont);
-    game_graph = new Form(cont);
-    game_graph->show();
+    game_graph = new Game_graphic(cont);
+
+    game_graph->game_start();
 
     connect(cont, SIGNAL(signal_closed()), this, SLOT(slot_game_close()));
 }

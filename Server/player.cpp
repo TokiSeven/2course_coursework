@@ -45,11 +45,13 @@ void Player::setIp(const QHostAddress ip)
 void Player::setX(const float x)
 {
     this->x = x;
+    emit changed_position(this);
 }
 
 void Player::setY(const float y)
 {
     this->y = y;
+    emit changed_position(this);
 }
 
 void Player::setAngle(const float angle)
@@ -63,6 +65,7 @@ void Player::setAngle(const float angle)
             buff += 360;
     }
     this->angle = buff;
+    emit changed_position(this);
 }
 
 void Player::setHealth(const int health)

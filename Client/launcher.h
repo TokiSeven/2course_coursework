@@ -6,7 +6,7 @@
 #include <QTimer>
 #include "container.h"
 #include "game_net.h"
-#include "form.h"
+#include "game_graphic.h"
 
 class Launcher : public QObject
 {
@@ -19,7 +19,7 @@ public:
     void startGame();//start game, if setPlName & connect to server was been
 
     inline Game_net* getGameNetwork()const{return this->game_net;}
-    inline Form* getGameGraphics()const{return this->game_graph;}
+    inline Game_graphic* getGameGraphics()const{return this->game_graph;}
     inline Container* getGameContainer()const{return this->cont;}
 
 signals:
@@ -44,7 +44,7 @@ private:
 
     //for game
     Game_net *game_net;
-    Form *game_graph;
+    Game_graphic *game_graph;
     Container *cont;
 };
 

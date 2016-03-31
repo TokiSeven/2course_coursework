@@ -29,7 +29,7 @@ private slots:
     void answerTrue();
     void answerFalse();
     void serverTimeout();
-    void closeEvent(QCloseEvent *);
+    //void closeEvent(QCloseEvent *);
     void slot_game_close();
 
     //GUI

@@ -47,12 +47,6 @@ void MainWindow::serverTimeout()
     ui->label_status->setText(QString::fromStdString("Server don't response. Please, try again or write other server ip."));
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
-{
-    emit signal_closed();
-    event->accept();
-}
-
 void MainWindow::slot_game_close()
 {
     //this->close();
