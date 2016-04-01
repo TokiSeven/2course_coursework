@@ -92,6 +92,7 @@ void Server::readPacketUdp()
         {
             sendAuth(*address, true);
             players.append(new Player(*address, pl_name));
+            send(players[players.size() - 1], sendPlayerToAll_con);
             emit update();
         }
         return;
@@ -235,6 +236,22 @@ void Server::sendArmor(QDataStream &out, Player *pl)
     out << pl->getArmor();
 }
 
+//                          =================
+//                          <<__SENDING connection player
+//                          =================
+void Server::sendPlayerToAll_con(QDataStream &out, Player *pl)
+{
+    out << Player::_CMD(_connected);
+}
+
+//                          =================
+//                          <<__SENDING disconnection player
+//                          =================
+void Server::sendPlayerToAll_dis(QDataStream &out, Player *pl)
+{
+    out << Player::_CMD(_disconnected);
+}
+
 //                          ==========================
 //                          <<__SENDING ASK TO PLAYERS
 //                          ==========================
@@ -244,7 +261,10 @@ void Server::checkWhoIsHere()
     for (int i = 0; i < players.size();)
     {
         if (!players[i]->getOnline())
+        {
+            send(players[i], sendPlayerToAll_dis);
             players.removeAt(i);
+        }
         else
             i++;
     }

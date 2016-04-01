@@ -8,7 +8,7 @@
 #include <QString>
 #include <QHostAddress>
 
-enum COMMAND {_online, _position, _armor, _health, _angle, _login};
+enum COMMAND {_online, _position, _armor, _health, _angle, _login, _connected, _disconnected};
 
 class Player : public QObject
 {
@@ -49,6 +49,8 @@ public:
         case _health: return "_health";
         case _angle: return "_angle";
         case _login: return "_login";
+        case _connected: return "_connected";
+        case _disconnected: return "_disconnected";
         }
     }
 
@@ -60,6 +62,8 @@ public:
         if (cmd == QString::fromStdString("_health")) return _health;
         if (cmd == QString::fromStdString("_angle")) return _angle;
         if (cmd == QString::fromStdString("_login")) return _login;
+        if (cmd == QString::fromStdString("_connected")) return _connected;
+        if (cmd == QString::fromStdString("_disconnected")) return _disconnected;
     }
 
 signals:

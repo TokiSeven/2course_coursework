@@ -31,6 +31,8 @@ public:
     void sendArmor(QDataStream&, Player*);//do it, if player change armor
     void sendPlayerWhoIsHere();//check all who offline
     void sendAuth(QHostAddress, bool);//send to ip that he auth
+    void sendPlayerToAll_con(QDataStream&, Player*);//it is start when Player connected to server
+    void sendPlayerToAll_dis(QDataStream&, Player*);//it is start when Player disconnected to server
 
     //inline selectors
     inline bool getServerStatus()const{return this->server_status;}//return status of the server
