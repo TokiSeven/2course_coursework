@@ -22,8 +22,12 @@ public:
 
     void game_start();
 
+signals:
+    void signal_update();
+
 public slots:
-    void slot_position(Player*);
+    void slot_position(Player);
+    void slot_update();
 
 protected:
     //sfml

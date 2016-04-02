@@ -24,21 +24,17 @@ public:
     bool stop();//stop the server
 
     //need for resend to players
-    void send(Player*, void (Server::*fnc)(QDataStream &, Player *));
-    void sendPosition(QDataStream&, Player*);//do it, if player move
-    void sendAngle(QDataStream&, Player*);//do it, if player change his angle
-    void sendHealth(QDataStream&, Player*);//do it, if player change hp
-    void sendArmor(QDataStream&, Player*);//do it, if player change armor
+    void send(Player, void (Server::*fnc)(QDataStream &, Player));//you should to call this with funct to sending parametrs
+    void sendPlayer(QDataStream&, Player);//do it, if player doing something
     void sendPlayerWhoIsHere();//check all who offline
     void sendAuth(QHostAddress, bool);//send to ip that he auth
-    void sendPlayerToAll_con(QDataStream&, Player*);//it is start when Player connected to server
-    void sendPlayerToAll_dis(QDataStream&, Player*);//it is start when Player disconnected to server
+    void sendPlayersToAll();//send all players to all
 
     //inline selectors
     inline bool getServerStatus()const{return this->server_status;}//return status of the server
     inline quint16 getServerPort()const{return this->udp_s_port;}//return port of the server
     inline quint16 getPlayerPort()const{return this->udp_p_port;}//return port of the players
-    inline const QList<Player*> getPlayers()const{return this->players;}//return all players
+    inline const QList<Player> getPlayers()const{return this->players;}//return all players
 
 signals:
     void update();//when somthing is been
@@ -56,7 +52,7 @@ private:
 
     QUdpSocket *socServer;//udp socket server
     bool server_status;//online or offline
-    QList<Player*> players;//all players
+    QList<Player> players;//all players
 
     quint16 udp_s_port;//server port for udp connection
     quint16 udp_p_port;//port of players (send on this port)

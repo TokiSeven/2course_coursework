@@ -16,17 +16,16 @@ public:
     ~Game_net();
 
     void send(void (Game_net::*fnc)(QDataStream &));
-    void sendPosition(QDataStream&);//do it, if player move
-    void sendAngle(QDataStream&);//do it, if player change his angle
-    void sendHealth(QDataStream&);//do it, if player change hp
-    void sendArmor(QDataStream&);//do it, if player change armor
+    void sendPlayer(QDataStream&);//do it, if player move
     void sendOnline(QDataStream&);//do it on timer
 
 signals:
     void signal_closed();
+    void signal_update();
 
 public slots:
     void slot_game_close();
+    void slot_update();
 
 private slots:
     void send_online();

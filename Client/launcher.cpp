@@ -48,6 +48,7 @@ void Launcher::startGame()
     game_graph->game_start();
 
     connect(cont, SIGNAL(signal_closed()), this, SLOT(slot_game_close()));
+    connect(this, SIGNAL(signal_closed()), cont, SLOT(slot_game_close()));
 }
 
 void Launcher::timeOut()

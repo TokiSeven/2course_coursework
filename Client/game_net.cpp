@@ -12,8 +12,8 @@ Game_net::Game_net(Container *cont, QObject *parent) : QObject(parent)
 
     connect(&timer, SIGNAL(timeout()), this, SLOT(send_online()));
 
-    connect(this->cont, SIGNAL(signal_closed()), this, SLOT(slot_game_close()));
-    connect(this, SIGNAL(signal_closed()), this->cont, SLOT(slot_game_close()));
+    connect(cont, SIGNAL(signal_update_all()), this, SLOT(slot_update()));
+    connect(this, SIGNAL(signal_update()), cont, SLOT(slot_update_all()));
 }
 
 Game_net::~Game_net()
@@ -33,7 +33,7 @@ void Game_net::send(void (Game_net::*fnc)(QDataStream&))
     QDataStream out(&data, QIODevice::WriteOnly);
 
     out << qint64(0);
-    out << cont->getPlayer_current()->getName();
+    out << cont->getPlayer_current().getName();
 
     (this->*fnc)(out);
 
@@ -44,45 +44,14 @@ void Game_net::send(void (Game_net::*fnc)(QDataStream&))
 }
 
 //                          =====================
-//                          <<__SENDING POSITION
+//                          <<__SENDING PLAYER
 //                          =====================
-void Game_net::sendPosition(QDataStream &out)
+void Game_net::sendPlayer(QDataStream &out)
 {
-    out << Player::_CMD(_position);
-    out << cont->getPlayer_current()->getX();
-    out << cont->getPlayer_current()->getY();
+    out << Player::_CMD(_update);
+    out << cont->getPlayer_current();
 }
 
-//                          =================
-//                          <<__SENDING ANGLE
-//                          =================
-void Game_net::sendAngle(QDataStream &out)
-{
-    out << Player::_CMD(_angle);
-    out << cont->getPlayer_current()->getAngle();
-}
-
-//                          ==================
-//                          <<__SENDING HEALTH
-//                          ==================
-void Game_net::sendHealth(QDataStream &out)
-{
-    out << Player::_CMD(_health);
-    out << cont->getPlayer_current()->getHealth();
-}
-
-//                          =================
-//                          <<__SENDING ARMOR
-//                          =================
-void Game_net::sendArmor(QDataStream &out)
-{
-    out << Player::_CMD(_armor);
-    out << cont->getPlayer_current()->getArmor();
-}
-
-//                          =================
-//                          <<__SENDING ONLINE
-//                          =================
 void Game_net::sendOnline(QDataStream &out)
 {
     out << Player::_CMD(_online);
@@ -127,6 +96,19 @@ void Game_net::checkData(QDataStream &in)
     in >> pl_name;
     in >> cmd_qs;
     COMMAND cmd = Player::_CMD(cmd_qs);
+
+    if (cmd == _update)
+    {
+        Player pl;
+        in >> pl;
+        cont->updatePlayer(pl);
+    }
+    else if (cmd == _players)
+    {
+        QList<Player> players;
+        in >> players;
+        cont->updatePlayers(players);
+    }
 }
 
 void Game_net::slot_game_close()
@@ -134,4 +116,9 @@ void Game_net::slot_game_close()
     emit signal_closed();
 //    if (this)
 //        delete this;
+}
+
+void Game_net::slot_update()
+{
+    send(sendPlayer);
 }

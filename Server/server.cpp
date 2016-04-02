@@ -82,7 +82,7 @@ void Server::readPacketUdp()
     {
         bool been = false;
         for (int i = 0; i < players.size(); i++)
-            if (players[i]->getName() == pl_name)
+            if (players[i].getName() == pl_name)
                 been = true;
         if (been)
         {
@@ -91,8 +91,9 @@ void Server::readPacketUdp()
         else
         {
             sendAuth(*address, true);
-            players.append(new Player(*address, pl_name));
-            send(players[players.size() - 1], sendPlayerToAll_con);
+            Player plr(*address, pl_name);
+            players.append(plr);
+            send(players[players.size() - 1], sendPlayer);
             emit update();
         }
         return;
@@ -104,51 +105,49 @@ void Server::readPacketUdp()
 
     if (j == -1)
     {
-        players.append(new Player(*address, pl_name));
+        players.append(*(new Player(*address, pl_name)));
         j = players.size() - 1;
     }
 
     //================================================================
     //                                big 'if' for command from player
     //================================================================
-    if (cmd == _position)
+    //    if (cmd == _position)
+    //    {
+    //        float x, y;
+    //        in >> x;
+    //        in >> y;
+    //        players[j]->setX(x);
+    //        players[j]->setY(y);
+    //        send(players[j], sendPosition);
+    //    }
+    //    else if (cmd == _angle)
+    //    {
+    //        float angle;
+    //        in >> angle;
+    //        players[j]->setAngle(angle);
+    //        send(players[j], sendAngle);
+    //    }
+    //    else if (cmd == _health)
+    //    {
+    //        int health;
+    //        in >> health;
+    //        players[j]->setHealth(health);
+    //        send(players[j], sendHealth);
+    //    }
+    //    else if (cmd == _armor)
+    //    {
+    //        int armor;
+    //        in >> armor;
+    //        players[j]->setArmor(armor);
+    //        send(players[j], sendArmor);
+    //    }
+    if (cmd == _update)
     {
-        float x, y;
-        in >> x;
-        in >> y;
-        players[j]->setX(x);
-        players[j]->setY(y);
-        send(players[j], sendPosition);
-    }
-    else if (cmd == _angle)
-    {
-        float angle;
-        in >> angle;
-        players[j]->setAngle(angle);
-        send(players[j], sendAngle);
-    }
-    else if (cmd == _health)
-    {
-        int health;
-        in >> health;
-        players[j]->setHealth(health);
-        send(players[j], sendHealth);
-    }
-    else if (cmd == _armor)
-    {
-        int armor;
-        in >> armor;
-        players[j]->setArmor(armor);
-        send(players[j], sendArmor);
     }
     else if (cmd == _online)
     {
-        players[j]->setOnline(true);
-    }
-
-    if (cmd == _online)
-    {
-        players[j]->setOnline(true);
+        players[j].setOnline(true);
     }
     emit update();
 }
@@ -160,7 +159,7 @@ int Server::searchPlayer(QHostAddress address, QString pl_name)
 {
     int j = -1;
     for (int i = 0; i < players.size() && j == -1; i++)
-        if (players[i]->getIp() == address && players[i]->getName() == pl_name)
+        if (players[i].getIp() == address && players[i].getName() == pl_name)
             j = i;
     return j;
 }
@@ -172,7 +171,7 @@ int Server::searchPlayer(QHostAddress address, QString pl_name)
 bool Server::checkAuth(const QString login)
 {
     for (int i = 0; i < players.size(); i++)
-        if (players[i]->getName() == login)
+        if (players[i].getName() == login)
             return false;
     return true;
 }
@@ -180,14 +179,14 @@ bool Server::checkAuth(const QString login)
 //                          ================================
 //                          <<__SENDING TO PLAYERS MAIN VIEW
 //                          ================================
-void Server::send(Player *pl, void (Server::*fnc)(QDataStream&, Player*))
+void Server::send(Player pl, void (Server::*fnc)(QDataStream&, Player))
 {
     //---!!!it is default settings!!!---
     QByteArray data;
     QDataStream out(&data, QIODevice::WriteOnly);
 
     out << qint64(0);
-    out << pl->getName();
+    out << pl.getName();
 
     (this->*fnc)(out, pl);
 
@@ -195,61 +194,17 @@ void Server::send(Player *pl, void (Server::*fnc)(QDataStream&, Player*))
     out.device()->seek(qint64(0));
     out << qint64(data.size() - sizeof(qint64));
     for (int i = 0; i < players.size(); i++)
-        if (players[i]->getName() != pl->getName())
-            socServer->writeDatagram(data, players[i]->getIp(), this->udp_p_port);
+        if (players[i].getName() != pl.getName())
+            socServer->writeDatagram(data, players[i].getIp(), this->udp_p_port);
 }
 
 //                          =====================
-//                          <<__SENDING POSITION
+//                          <<__SENDING PLAYER
 //                          =====================
-void Server::sendPosition(QDataStream &out, Player *pl)
+void Server::sendPlayer(QDataStream &out, Player pl)
 {
-    out << Player::_CMD(_position);
-    out << pl->getX();
-    out << pl->getY();
-}
-
-//                          =================
-//                          <<__SENDING ANGLE
-//                          =================
-void Server::sendAngle(QDataStream &out, Player *pl)
-{
-    out << Player::_CMD(_angle);
-    out << pl->getAngle();
-}
-
-//                          ==================
-//                          <<__SENDING HEALTH
-//                          ==================
-void Server::sendHealth(QDataStream &out, Player *pl)
-{
-    out << Player::_CMD(_health);
-    out << pl->getHealth();
-}
-
-//                          =================
-//                          <<__SENDING ARMOR
-//                          =================
-void Server::sendArmor(QDataStream &out, Player *pl)
-{
-    out << Player::_CMD(_armor);
-    out << pl->getArmor();
-}
-
-//                          =================
-//                          <<__SENDING connection player
-//                          =================
-void Server::sendPlayerToAll_con(QDataStream &out, Player *pl)
-{
-    out << Player::_CMD(_connected);
-}
-
-//                          =================
-//                          <<__SENDING disconnection player
-//                          =================
-void Server::sendPlayerToAll_dis(QDataStream &out, Player *pl)
-{
-    out << Player::_CMD(_disconnected);
+    out << Player::_CMD(_update);
+    out << pl;
 }
 
 //                          ==========================
@@ -258,20 +213,21 @@ void Server::sendPlayerToAll_dis(QDataStream &out, Player *pl)
 void Server::checkWhoIsHere()
 {
     //delete all, who before this did not asked that he is online
+    int size = players.size();
     for (int i = 0; i < players.size();)
     {
-        if (!players[i]->getOnline())
-        {
-            send(players[i], sendPlayerToAll_dis);
+        if (!players[i].getOnline())
             players.removeAt(i);
-        }
         else
             i++;
     }
 
     //reset status of all players
     for (int i = 0; i < players.size(); i++)
-        players[i]->setOnline(false);
+        players[i].setOnline(false);
+
+    if (size != players.size())
+        sendPlayersToAll();
 
     emit update();
 }
@@ -304,4 +260,23 @@ void Server::sendAuth(QHostAddress addr, bool flag)
     out.device()->seek(qint64(0));
     out << qint64(data.size() - sizeof(qint64));
     socServer->writeDatagram(data, addr, this->udp_l_port);
+}
+
+void Server::sendPlayersToAll()
+{
+    //---!!!it is default settings!!!---
+    QByteArray data;
+    QDataStream out(&data, QIODevice::WriteOnly);
+
+    out << qint64(0);
+    out << QString::fromStdString("SERVER");
+    out << Player::_CMD(_players);
+    out << this->players;
+
+
+    //---!!!it is default settings!!!---
+    out.device()->seek(qint64(0));
+    out << qint64(data.size() - sizeof(qint64));
+    for (int i = 0; i < players.size(); i++)
+        socServer->writeDatagram(data, players[i].getIp(), this->udp_p_port);
 }

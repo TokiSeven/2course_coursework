@@ -7,15 +7,18 @@
 #include <QObject>
 #include <QString>
 #include <QHostAddress>
+#include <QDataStream>
 
-enum COMMAND {_online, _position, _armor, _health, _angle, _login, _connected, _disconnected};
+enum COMMAND {_online, _update, _login, _connected, _disconnected, _error, _players};
 
 class Player : public QObject
 {
     Q_OBJECT
 public:
+    Player();
     Player(QHostAddress ip, QString name, float x = rand() % 100, float y = rand() % 100, float angle = 0, int health = 100, int armor = 100, QObject *parent = 0);
-    //~Player();
+    Player(const Player&);
+    ~Player();
 
     void setName(const QString);
     void setIp(const QHostAddress);
@@ -39,38 +42,88 @@ public:
     inline float getHeight()const{return this->height;}
     inline bool getOnline()const{return this->online;}
 
+    Player operator =(const Player &pl);
+    Player operator ()(QHostAddress ip, QString name, float x, float y, float angle, int health, int armor);
+    Player operator ()(const Player pl);
+
+    bool operator ==(const Player player);
+
+    friend QDataStream &operator <<(QDataStream &out, const Player pl)
+    {
+        out << pl.getName();
+        out << pl.getIp();
+        out << pl.getX();
+        out << pl.getY();
+        out << pl.getAngle();
+        out << pl.getHealth();
+        out << pl.getArmor();
+
+        return out;
+    }
+
+    friend QDataStream &operator >>(QDataStream &in, Player &pl)
+    {
+        //in.setFloatingPointPrecision(QDataStream::floatingPointPrecision());//need for float (in qt version >= 4.6)
+
+        QHostAddress ip;
+        QString name;
+        float x;
+        float y;
+        float angle;
+        int health;
+        int armor;
+
+        in >> name;
+        in >> ip;
+        in >> x;
+        in >> y;
+        in >> angle;
+        in >> health;
+        in >> armor;
+
+        pl(ip, name, x, y, angle, health, armor);
+
+        return in;
+    }
+
     static QString _CMD(COMMAND cmd)
     {
-        switch(cmd)
-        {
-        case _online: return "_online";
-        case _position: return "_position";
-        case _armor: return "_armor";
-        case _health: return "_health";
-        case _angle: return "_angle";
-        case _login: return "_login";
-        case _connected: return "_connected";
-        case _disconnected: return "_disconnected";
-        }
+        QString ret;
+
+        if (cmd == _online)
+            ret = "_online";
+        else if (cmd == _update)
+            ret = "_update";
+        else if (cmd == _login)
+            ret = "_login";
+        else if (cmd == _players)
+            ret = "_players";
+        else
+            ret = "_error";
+
+        return ret;
     }
 
     static COMMAND _CMD(QString cmd)
     {
-        if (cmd == QString::fromStdString("_online")) return _online;
-        if (cmd == QString::fromStdString("_position")) return _position;
-        if (cmd == QString::fromStdString("_armor")) return _armor;
-        if (cmd == QString::fromStdString("_health")) return _health;
-        if (cmd == QString::fromStdString("_angle")) return _angle;
-        if (cmd == QString::fromStdString("_login")) return _login;
-        if (cmd == QString::fromStdString("_connected")) return _connected;
-        if (cmd == QString::fromStdString("_disconnected")) return _disconnected;
+        COMMAND ret;
+
+        if (cmd == QString::fromStdString("_online"))
+            ret = _online;
+        else if (cmd == QString::fromStdString("_update"))
+            ret = _update;
+        else if (cmd == QString::fromStdString("_login"))
+            ret = _login;
+        else if (cmd == QString::fromStdString("_players"))
+            ret = _players;
+        else
+            ret = _error;
+
+        return ret;
     }
 
 signals:
-    void changed_position(Player*);
-    void changed_health(Player*);
-    void changed_armor(Player*);
-    void changed_angle(Player*);
+    void changed_update(Player*);
     void changed_fire(Player*);
 
 private:
@@ -85,5 +138,4 @@ private:
     float width;
     float height;
 };
-
 #endif // PLAYER_H

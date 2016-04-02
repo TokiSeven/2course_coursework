@@ -39,8 +39,8 @@ void MainWindow::update()
     {
         for (int i = 0; i < server->getPlayers().size(); i++)
         {
-            QString name = QString::fromStdString("Name: ") + server->getPlayers()[i]->getName();
-            QString ip = QString::fromStdString(", Ip: ") + server->getPlayers()[i]->getIp().toString();
+            QString name = QString::fromStdString("Name: ") + server->getPlayers()[i].getName();
+            QString ip = QString::fromStdString(", Ip: ") + server->getPlayers()[i].getIp().toString();
             QString port = QString::fromStdString(", Port: ") + QString::number(server->getPlayerPort());
             ui->list_player->addItem(name + ip + port);
         }
