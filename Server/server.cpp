@@ -169,7 +169,10 @@ void Server::send(Player pl, void (Server::*fnc)(QDataStream&, Player))
     out << qint64(data.size() - sizeof(qint64));
     for (int i = 0; i < players.size(); i++)
         if (players[i].getName() != pl.getName())
+        {
             socServer->writeDatagram(data, players[i].getIp(), this->udp_p_port);
+            qDebug() << players[i].getIp().toString();
+        }
 }
 
 //                          =====================

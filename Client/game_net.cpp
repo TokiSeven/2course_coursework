@@ -10,6 +10,7 @@ Game_net::Game_net(Container *cont, QObject *parent) : QObject(parent)
     timer.setInterval(1000);
     timer.start();
 
+    connect(soc, SIGNAL(readyRead()), this, SLOT(readDatagramUdp()));
     connect(&timer, SIGNAL(timeout()), this, SLOT(send_online()));
 
     connect(cont, SIGNAL(signal_update_all()), this, SLOT(slot_update()));
