@@ -59,13 +59,3 @@ void Container::updatePlayer(Player pl)
         emit signal_update_all();
     }
 }
-
-void Container::slot_update_current()
-{
-    emit signal_update_all();
-}
-
-void Container::slot_update_all()
-{
-    emit signal_update_current();
-}

@@ -15,6 +15,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(server, SIGNAL(stoped()), this, SLOT(server_stopped()));
     connect(server, SIGNAL(error()), this, SLOT(server_error()));
     connect(server, SIGNAL(update()), this, SLOT(update()));
+
+    connect(server, SIGNAL(stoped()), this, SLOT(close()));
+
+    server->start();
 }
 
 MainWindow::~MainWindow()

@@ -1,6 +1,7 @@
 #include "player.h"
 
 Player::Player()
+    : QObject()
 {
     this->setOnline(true);
     this->setIp(QHostAddress::LocalHost);
@@ -10,8 +11,8 @@ Player::Player()
     this->setAngle(0);
     this->setHealth(100);
     this->setArmor(100);
-    this->setWidth(10);
-    this->setHeight(10);
+    this->setWidth(50);
+    this->setHeight(50);
 }
 
 Player::Player(QHostAddress ip, QString name, float x, float y, float angle, int health, int armor, QObject *parent)
@@ -25,13 +26,23 @@ Player::Player(QHostAddress ip, QString name, float x, float y, float angle, int
     this->setAngle(angle);
     this->setHealth(health);
     this->setArmor(armor);
-    this->setWidth(10);
-    this->setHeight(10);
+    this->setWidth(50);
+    this->setHeight(50);
 }
 
 Player::Player(const Player &pl)
+    : QObject(pl.parent())
 {
-    (*this) = pl;
+    this->setOnline(pl.getOnline());
+    this->setIp(pl.getIp());
+    this->setName(pl.getName());
+    this->setX(pl.getX());
+    this->setY(pl.getY());
+    this->setAngle(pl.getAngle());
+    this->setHealth(pl.getHealth());
+    this->setArmor(pl.getArmor());
+    this->setWidth(pl.getWidth());
+    this->setHeight(pl.getHeight());
 }
 
 Player::~Player()
@@ -138,11 +149,11 @@ Player Player::operator =(const Player &pl)
 
 Player Player::operator ()(const Player pl)
 {
-    (*this)(pl.getIp(), pl.getName(), pl.getX(), pl.getY(), pl.getAngle(), pl.getHealth(), pl.getArmor());
+    (*this)(pl.getName(), pl.getX(), pl.getY(), pl.getAngle(), pl.getHealth(), pl.getArmor());
     return (*this);
 }
 
-Player Player::operator ()(QHostAddress ip, QString name, float x, float y, float angle, int health, int armor)
+Player Player::operator ()(QString name, float x, float y, float angle, int health, int armor)
 {
     this->setIp(ip);
     this->setName(name);

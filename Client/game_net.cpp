@@ -13,7 +13,6 @@ Game_net::Game_net(Container *cont, QObject *parent) : QObject(parent)
     connect(&timer, SIGNAL(timeout()), this, SLOT(send_online()));
 
     connect(cont, SIGNAL(signal_update_all()), this, SLOT(slot_update()));
-    connect(this, SIGNAL(signal_update()), cont, SLOT(slot_update_all()));
 }
 
 Game_net::~Game_net()
@@ -70,6 +69,7 @@ void Game_net::send_online()
 //                          ====================
 void Game_net::readDatagramUdp()
 {
+    qDebug() <<"sad";
     QByteArray datagram;
     datagram.resize(soc->pendingDatagramSize());
     soc->readDatagram(datagram.data(), datagram.size());
@@ -96,6 +96,8 @@ void Game_net::checkData(QDataStream &in)
     in >> pl_name;
     in >> cmd_qs;
     COMMAND cmd = Player::_CMD(cmd_qs);
+
+    qDebug() << Player::_CMD(cmd);
 
     if (cmd == _update)
     {

@@ -112,38 +112,12 @@ void Server::readPacketUdp()
     //================================================================
     //                                big 'if' for command from player
     //================================================================
-    //    if (cmd == _position)
-    //    {
-    //        float x, y;
-    //        in >> x;
-    //        in >> y;
-    //        players[j]->setX(x);
-    //        players[j]->setY(y);
-    //        send(players[j], sendPosition);
-    //    }
-    //    else if (cmd == _angle)
-    //    {
-    //        float angle;
-    //        in >> angle;
-    //        players[j]->setAngle(angle);
-    //        send(players[j], sendAngle);
-    //    }
-    //    else if (cmd == _health)
-    //    {
-    //        int health;
-    //        in >> health;
-    //        players[j]->setHealth(health);
-    //        send(players[j], sendHealth);
-    //    }
-    //    else if (cmd == _armor)
-    //    {
-    //        int armor;
-    //        in >> armor;
-    //        players[j]->setArmor(armor);
-    //        send(players[j], sendArmor);
-    //    }
     if (cmd == _update)
     {
+        Player pl;
+        in >> pl;
+        players[j](pl);
+        send(players[j], sendPlayer);
     }
     else if (cmd == _online)
     {

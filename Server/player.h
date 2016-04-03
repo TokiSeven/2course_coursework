@@ -43,7 +43,7 @@ public:
     inline bool getOnline()const{return this->online;}
 
     Player operator =(const Player &pl);
-    Player operator ()(QHostAddress ip, QString name, float x, float y, float angle, int health, int armor);
+    Player operator ()(QString name, float x, float y, float angle, int health, int armor);
     Player operator ()(const Player pl);
 
     bool operator ==(const Player player);
@@ -51,7 +51,6 @@ public:
     friend QDataStream &operator <<(QDataStream &out, const Player pl)
     {
         out << pl.getName();
-        out << pl.getIp();
         out << pl.getX();
         out << pl.getY();
         out << pl.getAngle();
@@ -65,7 +64,6 @@ public:
     {
         //in.setFloatingPointPrecision(QDataStream::floatingPointPrecision());//need for float (in qt version >= 4.6)
 
-        QHostAddress ip;
         QString name;
         float x;
         float y;
@@ -74,14 +72,13 @@ public:
         int armor;
 
         in >> name;
-        in >> ip;
         in >> x;
         in >> y;
         in >> angle;
         in >> health;
         in >> armor;
 
-        pl(ip, name, x, y, angle, health, armor);
+        pl(name, x, y, angle, health, armor);
 
         return in;
     }

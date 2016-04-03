@@ -30,8 +30,6 @@ signals:
 
 public slots:
     void slot_game_close();
-    void slot_update_current();
-    void slot_update_all();
 
 private:
     QHostAddress server_ip;

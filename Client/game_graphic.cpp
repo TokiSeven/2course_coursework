@@ -9,7 +9,6 @@ Game_graphic::Game_graphic(Container *cont)//constructor, set size of window and
     this->windowName = "NoName";
 
     connect(cont, SIGNAL(signal_update_current()), this, SLOT(slot_update()));
-    connect(this, SIGNAL(signal_update()), cont, SLOT(slot_update_current()));
 }
 
 Game_graphic::~Game_graphic()//destructor
@@ -58,14 +57,17 @@ void Game_graphic::events(sf::Event &event)//when something was done (for exampl
         window->close();
     if (event.type == sf::Event::KeyPressed)
     {
+        Player pl(cont->getPlayer_current());
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-            this->cont->getPlayer_current().setX(cont->getPlayer_current().getX() - 1);
+            pl.setX(pl.getX() - 1);
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-            this->cont->getPlayer_current().setX(cont->getPlayer_current().getX() + 1);
+            pl.setX(pl.getX() + 1);
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-            this->cont->getPlayer_current().setY(cont->getPlayer_current().getY() - 1);
+            pl.setY(pl.getY() - 1);
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-            this->cont->getPlayer_current().setY(cont->getPlayer_current().getY() + 1);
+            pl.setY(pl.getY() + 1);
+        cont->updatePlayer(pl);
+        initialization();
     }
 }
 
@@ -103,9 +105,11 @@ void Game_graphic::slot_position(Player player)
     else if (num < cont->getPlayer_all().size())
         this->pl_all[num].setPosition(cont->getPlayer_all()[num].getX(), cont->getPlayer_all()[num].getY());
 }
- void Game_graphic::slot_update()
- {
- }
+
+void Game_graphic::slot_update()
+{
+    initialization();
+}
 
 //================================================================================================
 //==========================================SLOTS(FINISH)==========================================
