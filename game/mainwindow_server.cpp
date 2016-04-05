@@ -1,10 +1,10 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "mainwindow_server.h"
+#include "ui_mainwindow_server.h"
 #include <QFile>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow_server::MainWindow_server(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow_server)
 {
     ui->setupUi(this);
 
@@ -21,22 +21,22 @@ MainWindow::MainWindow(QWidget *parent) :
     server->start();
 }
 
-MainWindow::~MainWindow()
+MainWindow_server::~MainWindow_server()
 {
     delete ui;
 }
 
-void MainWindow::on_button_stop_server_clicked()
+void MainWindow_server::on_button_stop_server_clicked()
 {
     server->stop();
 }
 
-void MainWindow::on_button_start_server_clicked()
+void MainWindow_server::on_button_start_server_clicked()
 {
     server->start();
 }
 
-void MainWindow::update()
+void MainWindow_server::update()
 {
     ui->list_player->clear();
     if (server->getServerStatus())
@@ -54,13 +54,13 @@ void MainWindow::update()
     }
 }
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow_server::on_pushButton_clicked()
 {
     ui->list_debug->clear();
     emit update_gui();
 }
 
-void MainWindow::server_started()
+void MainWindow_server::server_started()
 {
     ui->button_start_server->setEnabled(false);
     ui->button_stop_server->setEnabled(true);
@@ -68,7 +68,7 @@ void MainWindow::server_started()
     emit update_gui();
 }
 
-void MainWindow::server_stopped()
+void MainWindow_server::server_stopped()
 {
     ui->button_start_server->setEnabled(true);
     ui->button_stop_server->setEnabled(false);
@@ -76,7 +76,7 @@ void MainWindow::server_stopped()
     emit update_gui();
 }
 
-void MainWindow::server_error()
+void MainWindow_server::server_error()
 {
     ui->list_debug->addItem("Some errors in server. Please restart them.");
     emit update_gui();

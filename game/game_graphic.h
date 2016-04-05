@@ -1,15 +1,10 @@
 #ifndef GAME_GRAPHIC_H
 #define GAME_GRAPHIC_H
 
-//qt libraries
 #include <QObject>
 #include <QTimer>
 #include <QUdpSocket>
-
-//personal libraries
 #include "container.h"
-
-//sfml libraries
 #include <SFML/Graphics.hpp>
 
 class Game_graphic : public QObject

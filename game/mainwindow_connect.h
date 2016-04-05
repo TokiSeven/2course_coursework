@@ -1,28 +1,27 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_CONNECT_H
+#define MAINWINDOW_CONNECT_H
 
 #include <QMainWindow>
-#include <QTcpSocket>
-#include "launcher.h"
+#include "launcher_connect.h"
 
 namespace Ui {
-class MainWindow;
+class MainWindow_connect;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow_connect : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit MainWindow_connect(QWidget *parent = 0);
+    ~MainWindow_connect();
 
 signals:
     void signal_closed();
 
 private:
-    Ui::MainWindow *ui;
-    Launcher *launch;
+    Ui::MainWindow_connect *ui;
+    Launcher_connect *launch;
 
 private slots:
     //network
@@ -36,4 +35,4 @@ private slots:
     void on_button_connect_clicked();
 };
 
-#endif // MAINWINDOW_H
+#endif // MAINWINDOW_CONNECT_H

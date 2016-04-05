@@ -1,12 +1,12 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "mainwindow_connect.h"
+#include "ui_mainwindow_connect.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow_connect::MainWindow_connect(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow_connect)
 {
     ui->setupUi(this);
-    launch = new Launcher;
+    launch = new Launcher_connect;
 
     connect(launch, SIGNAL(connected()), this, SLOT(answerTrue()));
     connect(launch, SIGNAL(disconnected()), this, SLOT(serverTimeout()));
@@ -17,23 +17,23 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(signal_closed()), launch, SLOT(slot_game_close()));
 }
 
-MainWindow::~MainWindow()
+MainWindow_connect::~MainWindow_connect()
 {
     delete ui;
 }
 
-void MainWindow::on_button_connect_clicked()
+void MainWindow_connect::on_button_connect_clicked()
 {
     launch->connectToServer(ui->line_server_ip->text(), ui->line_nick->text());
     ui->label_status->setText(QString::fromStdString("Connecting..."));
 }
 
-void MainWindow::answerFalse()
+void MainWindow_connect::answerFalse()
 {
     ui->label_status->setText(QString::fromStdString("Some errors. Please write other nickname or ip address of server."));
 }
 
-void MainWindow::answerTrue()
+void MainWindow_connect::answerTrue()
 {
     ui->label_status->setText(QString::fromStdString("Starting the game..."));
     ui->line_nick->setEnabled(false);
@@ -42,12 +42,12 @@ void MainWindow::answerTrue()
     launch->startGame();
 }
 
-void MainWindow::serverTimeout()
+void MainWindow_connect::serverTimeout()
 {
     ui->label_status->setText(QString::fromStdString("Server don't response. Please, try again or write other server ip."));
 }
 
-void MainWindow::slot_game_close()
+void MainWindow_connect::slot_game_close()
 {
     //this->close();
 }

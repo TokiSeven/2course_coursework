@@ -1,5 +1,5 @@
-#ifndef LAUNCHER_H
-#define LAUNCHER_H
+#ifndef LAUNCHER_CONNECT_H
+#define LAUNCHER_CONNECT_H
 
 #include <QObject>
 #include <QString>
@@ -8,12 +8,12 @@
 #include "game_net.h"
 #include "game_graphic.h"
 
-class Launcher : public QObject
+class Launcher_connect : public QObject
 {
     Q_OBJECT
 public:
-    explicit Launcher(quint16 serv_port = 1100, quint16 ln_port = 2200, QObject *parent = 0);
-    ~Launcher();
+    explicit Launcher_connect(quint16 serv_port = 1100, quint16 ln_port = 2200, QObject *parent = 0);
+    ~Launcher_connect();
 
     void connectToServer(const QString serv_ip, QString pl_name);//connect to server on ip "serv_ip"
     void startGame();//start game, if setPlName & connect to server was been

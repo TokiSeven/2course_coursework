@@ -1,6 +1,6 @@
-#include "launcher.h"
+#include "Launcher_connect.h"
 
-Launcher::Launcher(quint16 serv_port, quint16 ln_port, QObject *parent) : QObject(parent)
+Launcher_connect::Launcher_connect(quint16 serv_port, quint16 ln_port, QObject *parent) : QObject(parent)
 {
     this->server_port = serv_port;
     this->launcher_port = ln_port;
@@ -10,14 +10,14 @@ Launcher::Launcher(quint16 serv_port, quint16 ln_port, QObject *parent) : QObjec
     connect(socket, SIGNAL(readyRead()), this, SLOT(readUdpDiagrams()));
 }
 
-Launcher::~Launcher()
+Launcher_connect::~Launcher_connect()
 {
     emit signal_closed();
 //    if (this)
 //        delete this;
 }
 
-void Launcher::connectToServer(const QString serv_ip, QString pl_name)
+void Launcher_connect::connectToServer(const QString serv_ip, QString pl_name)
 {
     this->player_name = pl_name;
     this->server_ip = QHostAddress(serv_ip);
@@ -39,7 +39,7 @@ void Launcher::connectToServer(const QString serv_ip, QString pl_name)
     timer.start();
 }
 
-void Launcher::startGame()
+void Launcher_connect::startGame()
 {
     cont = new Container(this->player_name, this->server_ip);
     game_net = new Game_net(cont);
@@ -51,12 +51,12 @@ void Launcher::startGame()
     connect(this, SIGNAL(signal_closed()), cont, SLOT(slot_game_close()));
 }
 
-void Launcher::timeOut()
+void Launcher_connect::timeOut()
 {
     emit disconnected();
 }
 
-void Launcher::readUdpDiagrams()
+void Launcher_connect::readUdpDiagrams()
 {
     QByteArray datagram;
     datagram.resize(socket->pendingDatagramSize());
@@ -95,7 +95,7 @@ void Launcher::readUdpDiagrams()
 }
 
 
-void Launcher::slot_game_close()
+void Launcher_connect::slot_game_close()
 {
     emit signal_closed();
 //    if (this)

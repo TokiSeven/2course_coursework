@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QString>
-#include "../Server/player.h"
+#include "player.h"
 
 class Container : public QObject
 {

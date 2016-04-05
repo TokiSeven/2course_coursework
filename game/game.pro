@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2016-01-06T01:40:10
+# Project created by QtCreator 2016-04-05T22:34:33
 #
 #-------------------------------------------------
 
@@ -8,26 +8,40 @@ QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Client
+TARGET = game
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    launcher.cpp \
+        launcher.cpp \
     container.cpp \
+    game_graphic.cpp \
     game_net.cpp \
-    ../Server/player.cpp \
-    game_graphic.cpp
+    launcher_connect.cpp \
+    mainwindow_connect.cpp \
+    mainwindow_server.cpp \
+    player.cpp \
+    server.cpp \
+    mainwindow_new.cpp
 
-HEADERS  += mainwindow.h \
-    launcher.h \
+HEADERS  += launcher.h \
     container.h \
+    game_graphic.h \
     game_net.h \
-    ../Server/player.h \
-    game_graphic.h
+    launcher_connect.h \
+    mainwindow_connect.h \
+    mainwindow_server.h \
+    player.h \
+    server.h \
+    mainwindow_new.h
 
-FORMS    += mainwindow.ui
+FORMS    += launcher.ui \
+    mainwindow_connect.ui \
+    mainwindow_server.ui \
+    mainwindow_new.ui
+
+DISTFILES += \
+    game.pro.user
 
 
 LIBS += -LD:/SFML/lib

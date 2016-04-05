@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_SERVER_H
+#define MAINWINDOW_SERVER_H
 
 #include <QMainWindow>
 #include <QDateTime>
@@ -8,19 +8,19 @@
 #include "server.h"
 
 namespace Ui {
-class MainWindow;
+class MainWindow_server;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow_server : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit MainWindow_server(QWidget *parent = 0);
+    ~MainWindow_server();
 
 private:
-    Ui::MainWindow *ui;
+    Ui::MainWindow_server *ui;
     Server *server;
 
 signals:
@@ -36,4 +36,4 @@ private slots:
     void server_error();//when server has error
 };
 
-#endif // MAINWINDOW_H
+#endif // MAINWINDOW_SERVER_H

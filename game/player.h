@@ -43,8 +43,8 @@ public:
     inline bool getOnline()const{return this->online;}
 
     Player operator =(const Player &pl);
-    Player operator ()(QString name, float x, float y, float angle, int health, int armor);
-    Player operator ()(const Player pl);
+    void operator ()(QString name, float x, float y, float angle, int health, int armor);
+    void operator ()(const Player pl);
 
     bool operator ==(const Player player);
 
