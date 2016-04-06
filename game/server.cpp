@@ -91,9 +91,14 @@ void Server::readPacketUdp()
         else
         {
             sendAuth(*address, true);
+
             Player plr(*address, pl_name);
+            int num = players.size();
+
             players.append(plr);
-            send(players[players.size() - 1], sendPlayer);
+            players[num].setIp(*address);
+
+            send(players[num], sendPlayer);
             emit update();
         }
         return;

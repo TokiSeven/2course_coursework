@@ -15,6 +15,7 @@ class MainWindow_connect : public QMainWindow
 public:
     explicit MainWindow_connect(QWidget *parent = 0);
     ~MainWindow_connect();
+    Launcher_connect *getLauncher()const{return this->launch;}
 
 signals:
     void signal_closed();

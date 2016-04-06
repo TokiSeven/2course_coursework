@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "mainwindow_server.h"
 #include "mainwindow_connect.h"
+#include <QCloseEvent>
 
 namespace Ui {
 class Launcher;
@@ -17,6 +18,9 @@ public:
     explicit Launcher(QWidget *parent = 0);
     ~Launcher();
 
+protected:
+    void closeEvent(QCloseEvent *);
+
 private slots:
     void on_button_connect_clicked();
 
@@ -24,8 +28,8 @@ private slots:
 
 private:
     Ui::Launcher *ui;
-    MainWindow_connect win_connect;
-    MainWindow_server win_server;
+    MainWindow_connect *win_connect;
+    MainWindow_server *win_server;
 };
 
 #endif // LAUNCHER_H

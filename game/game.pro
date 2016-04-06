@@ -21,8 +21,7 @@ SOURCES += main.cpp\
     mainwindow_connect.cpp \
     mainwindow_server.cpp \
     player.cpp \
-    server.cpp \
-    mainwindow_new.cpp
+    server.cpp
 
 HEADERS  += launcher.h \
     container.h \
@@ -32,22 +31,20 @@ HEADERS  += launcher.h \
     mainwindow_connect.h \
     mainwindow_server.h \
     player.h \
-    server.h \
-    mainwindow_new.h
+    server.h
 
 FORMS    += launcher.ui \
     mainwindow_connect.ui \
-    mainwindow_server.ui \
-    mainwindow_new.ui
+    mainwindow_server.ui
 
 DISTFILES += \
     game.pro.user
 
 
-LIBS += -LD:/SFML/lib
+LIBS += -LC:/SFML/lib
 
 CONFIG(release, debug|release): LIBS += -lsfml-audio -lsfml-graphics -lsfml-main -lsfml-network -lsfml-window -lsfml-system
 CONFIG(debug, debug|release): LIBS += -lsfml-audio-d -lsfml-graphics-d -lsfml-main-d -lsfml-network-d -lsfml-window-d -lsfml-system-d
 
-INCLUDEPATH += D:/SFML/include
-DEPENDPATH += D:/SFML/include
+INCLUDEPATH += C:/SFML/include
+DEPENDPATH += C:/SFML/include
