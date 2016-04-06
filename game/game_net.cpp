@@ -7,6 +7,8 @@ Game_net::Game_net(Container *cont, QObject *parent) : QObject(parent)
     soc = new QUdpSocket;
     soc->bind(cont->getPlayerPort());
 
+    this->serv = NULL;
+
     timer.setInterval(1000);
     timer.start();
 
@@ -19,8 +21,8 @@ Game_net::Game_net(Container *cont, QObject *parent) : QObject(parent)
 Game_net::~Game_net()
 {
     emit signal_closed();
-//    if (this)
-//        delete this;
+    //    if (this)
+    //        delete this;
 }
 
 //                          ================================
@@ -117,11 +119,25 @@ void Game_net::checkData(QDataStream &in)
 void Game_net::slot_game_close()
 {
     emit signal_closed();
-//    if (this)
-//        delete this;
+    //    if (this)
+    //        delete this;
 }
 
 void Game_net::slot_update()
 {
     send(sendPlayer);
+}
+
+
+void Game_net::server_start()
+{
+    if (serv != NULL)
+    {
+        if (serv->getServerStatus())
+            serv->stop();
+        delete serv;
+        serv = NULL;
+    }
+    serv = new Server;
+    serv->start();
 }

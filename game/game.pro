@@ -19,7 +19,6 @@ SOURCES += main.cpp\
     game_net.cpp \
     launcher_connect.cpp \
     mainwindow_connect.cpp \
-    mainwindow_server.cpp \
     player.cpp \
     server.cpp
 
@@ -29,13 +28,11 @@ HEADERS  += launcher.h \
     game_net.h \
     launcher_connect.h \
     mainwindow_connect.h \
-    mainwindow_server.h \
     player.h \
     server.h
 
 FORMS    += launcher.ui \
-    mainwindow_connect.ui \
-    mainwindow_server.ui
+    mainwindow_connect.ui
 
 DISTFILES += \
     game.pro.user

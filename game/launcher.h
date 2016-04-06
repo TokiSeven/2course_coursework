@@ -2,7 +2,6 @@
 #define LAUNCHER_H
 
 #include <QDialog>
-#include "mainwindow_server.h"
 #include "mainwindow_connect.h"
 #include <QCloseEvent>
 
@@ -29,7 +28,6 @@ private slots:
 private:
     Ui::Launcher *ui;
     MainWindow_connect *win_connect;
-    MainWindow_server *win_server;
 };
 
 #endif // LAUNCHER_H

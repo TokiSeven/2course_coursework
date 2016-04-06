@@ -7,7 +7,6 @@ Launcher::Launcher(QWidget *parent) :
 {
     ui->setupUi(this);
     this->win_connect = 0;
-    this->win_server = 0;
 }
 
 Launcher::~Launcher()
@@ -17,11 +16,6 @@ Launcher::~Launcher()
 
 void Launcher::closeEvent(QCloseEvent *event)
 {
-    if (this->win_server)
-    {
-        this->win_server->close();
-        delete this->win_server;
-    }
     if (this->win_connect)
     {
         this->win_connect->close();
@@ -44,16 +38,7 @@ void Launcher::on_button_connect_clicked()
 
 void Launcher::on_button_create_clicked()
 {
-    if (this->win_server)
-    {
-        this->win_server->close();
-        delete this->win_server;
-    }
-
-    this->win_server = new MainWindow_server(this);
-    this->win_server->show();
-
     this->on_button_connect_clicked();
-
+    this->win_connect->getLauncher()->getGameNetwork()->server_start();
     this->win_connect->getLauncher()->connectToServer("127.0.0.1", "SERVER");
 }

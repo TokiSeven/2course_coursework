@@ -33,7 +33,6 @@ Player::Player(QHostAddress ip, QString name, float x, float y, float angle, int
 Player::Player(const Player &pl)
     : QObject(pl.parent())
 {
-    qDebug() << QString("Cons_Copy: name=") + pl.getName() + QString("|||ip=") + pl.getIp().toString();
     this->setOnline(pl.getOnline());
     this->setIp(pl.getIp());
     this->setName(pl.getName());
@@ -144,13 +143,14 @@ Player Player::operator =(const Player &pl)
     this->setHeight(pl.getHeight());
     this->setWidth(pl.getWidth());
     this->setOnline(pl.getOnline());
-    (*this)(pl);
+    //(*this)(pl);
+    this->operator ()(pl);
     return (*this);
 }
 
 void Player::operator ()(const Player pl)
 {
-    (*this)(pl.getName(), pl.getX(), pl.getY(), pl.getAngle(), pl.getHealth(), pl.getArmor());
+    this->operator ()(pl.getName(), pl.getX(), pl.getY(), pl.getAngle(), pl.getHealth(), pl.getArmor());
 }
 
 void Player::operator ()(QString name, float x, float y, float angle, int health, int armor)

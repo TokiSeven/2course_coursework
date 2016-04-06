@@ -176,7 +176,7 @@ void Server::send(Player pl, void (Server::*fnc)(QDataStream&, Player))
         if (players[i].getName() != pl.getName())
         {
             socServer->writeDatagram(data, players[i].getIp(), this->udp_p_port);
-            qDebug() << players[i].getIp().toString();
+            qDebug() << QString("Server: ") + players[i].getName() + QString(":") + players[i].getIp().toString();
         }
 }
 
