@@ -19,10 +19,12 @@ public:
 
 signals:
     void signal_update();
+    void signal_game_closed();
 
 public slots:
     void slot_position(Player);
     void slot_update();
+    void slot_game_start();
 
 protected:
     //sfml

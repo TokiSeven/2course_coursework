@@ -7,6 +7,7 @@
 #include "container.h"
 #include "game_net.h"
 #include "game_graphic.h"
+#include <QThread>
 
 class Launcher_connect : public QObject
 {

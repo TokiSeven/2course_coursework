@@ -55,7 +55,15 @@ void Container::updatePlayer(Player pl)
     }
     else
     {
-        this->pl(pl);
-        emit signal_update_all();
+        if (this->pl.getName() == pl.getName())
+        {
+            this->pl(pl);
+            emit signal_update_all();
+        }
+        else
+        {
+            this->players.append(pl);
+            emit signal_update_current();
+        }
     }
 }

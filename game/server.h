@@ -23,13 +23,6 @@ public:
     bool start();//start the server
     bool stop();//stop the server
 
-    //need for resend to players
-    void send(Player, void (Server::*fnc)(QDataStream &, Player));//you should to call this with funct to sending parametrs
-    void sendPlayer(QDataStream&, Player);//do it, if player doing something
-    void sendPlayerWhoIsHere();//check all who offline
-    void sendAuth(QHostAddress, bool);//send to ip that he auth
-    void sendPlayersToAll();//send all players to all
-
     //inline selectors
     inline bool getServerStatus()const{return this->server_status;}//return status of the server
     inline quint16 getServerPort()const{return this->udp_s_port;}//return port of the server
@@ -47,6 +40,13 @@ public slots:
     void checkWhoIsHere();//send on timer to all players and check their status
 
 private:
+    //need for resend to players
+    void send(Player, void (Server::*fnc)(QDataStream &, Player));//you should to call this with funct to sending parametrs
+    void sendPlayer(QDataStream&, Player);//do it, if player doing something
+    void sendPlayerWhoIsHere();//check all who offline
+    void sendAuth(QHostAddress, bool);//send to ip that he auth
+    void sendPlayersToAll();//send all players to all
+
     bool checkAuth(const QString);//check authorization
     int searchPlayer(QHostAddress, QString);//search player by ip and name and return his number in list
 

@@ -76,7 +76,10 @@ void Server::readPacketUdp()
 
     COMMAND cmd = Player::_CMD(cmd_qs);
 
-    qDebug() << pl_name + QString::fromStdString(" || ") + cmd_qs;
+    qDebug() << QString("server >> NICK: ") + pl_name;
+    qDebug() << QString("       >> CMD: ") + cmd_qs;
+    qDebug() << QString("       >> IP: ") + address->toString();
+    qDebug() << QString("");
 
     if (cmd == _login)
     {

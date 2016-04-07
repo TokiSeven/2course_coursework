@@ -70,7 +70,6 @@ void Game_net::send_online()
 //                          ====================
 void Game_net::readDatagramUdp()
 {
-    qDebug() <<"sad";
     QByteArray datagram;
     datagram.resize(soc->pendingDatagramSize());
     soc->readDatagram(datagram.data(), datagram.size());
@@ -98,7 +97,7 @@ void Game_net::checkData(QDataStream &in)
     in >> cmd_qs;
     COMMAND cmd = Player::_CMD(cmd_qs);
 
-    qDebug() << Player::_CMD(cmd);
+    qDebug() << pl_name + "::" + Player::_CMD(cmd);
 
     if (cmd == _update)
     {

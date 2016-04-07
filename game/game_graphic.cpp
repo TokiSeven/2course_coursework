@@ -92,6 +92,7 @@ void Game_graphic::game_start()//main function of game
         this->draw();
         window->display();
     }
+    emit signal_game_closed();
 }
 
 //================================================================================================
@@ -109,6 +110,11 @@ void Game_graphic::slot_position(Player player)
 void Game_graphic::slot_update()
 {
     initialization();
+}
+
+void Game_graphic::slot_game_start()
+{
+    this->game_start();
 }
 
 //================================================================================================
