@@ -7,7 +7,6 @@
 #include <QString>
 #include <QDataStream>
 #include <QTimer>
-#include "server.h"
 
 class Game_net : public QObject
 {
@@ -19,9 +18,6 @@ public:
     void send(void (Game_net::*fnc)(QDataStream &));
     void sendPlayer(QDataStream&);//do it, if player move
     void sendOnline(QDataStream&);//do it on timer
-
-    //if player is server
-    void server_start();
 
 signals:
     void signal_closed();
@@ -44,8 +40,6 @@ private:
     Container *cont;
     QUdpSocket *soc;
     quint16 p_port;
-
-    Server *serv;
 };
 
 #endif // GAME_NET_H

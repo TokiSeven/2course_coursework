@@ -122,6 +122,7 @@ void Server::readPacketUdp()
         Player pl;
         in >> pl;
         players[j](pl);
+        players[j].setIp(*address);
         send(players[j], sendPlayer);
     }
     else if (cmd == _online)

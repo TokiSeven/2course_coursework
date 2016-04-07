@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "mainwindow_connect.h"
+#include "server.h"
 #include <QCloseEvent>
 
 namespace Ui {
@@ -28,6 +29,7 @@ private slots:
 private:
     Ui::Launcher *ui;
     MainWindow_connect *win_connect;
+    Server *serv;
 };
 
 #endif // LAUNCHER_H
