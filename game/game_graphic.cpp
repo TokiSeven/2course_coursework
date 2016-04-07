@@ -18,8 +18,10 @@ Game_graphic::~Game_graphic()//destructor
     //        delete this;
 }
 
-void Game_graphic::initialization()//started ones and not only more
+void Game_graphic::initialization()
 {
+    pl_all.clear();
+
     int size = cont->getPlayer_all().size();
     float width = cont->getPlayer_current().getWidth();
     float height = cont->getPlayer_current().getHeight();

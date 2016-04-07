@@ -10,14 +10,19 @@ Game_net::Game_net(Container *cont, QObject *parent) : QObject(parent)
     timer.setInterval(1000);
     timer.start();
 
+    timer_server_answer.setInterval(3000);
+    timer_server_answer.start();
+
     connect(soc, SIGNAL(readyRead()), this, SLOT(readDatagramUdp()));
     connect(&timer, SIGNAL(timeout()), this, SLOT(send_online()));
+    connect(&timer_server_answer, SIGNAL(timeout()), this, SLOT(slot_game_close()));
 
     connect(cont, SIGNAL(signal_update_all()), this, SLOT(slot_update()));
 }
 
 Game_net::~Game_net()
 {
+    this->cont->slot_game_close();
     emit signal_closed();
     //    if (this)
     //        delete this;
@@ -107,6 +112,7 @@ void Game_net::checkData(QDataStream &in)
     }
     else if (cmd == _players)
     {
+        timer_server_answer.start();
         QList<Player> players;
         in >> players;
         cont->updatePlayers(players);

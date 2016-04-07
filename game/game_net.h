@@ -30,12 +30,14 @@ public slots:
 private slots:
     void send_online();
     void readDatagramUdp();
+    //void slot_time_out();
 
 private:
     void checkData(QDataStream&);
     int searchPlayer(QHostAddress, QString);
 
     QTimer timer;
+    QTimer timer_server_answer;//it will be, if server goes offline
 
     Container *cont;
     QUdpSocket *soc;

@@ -259,7 +259,6 @@ void Server::sendPlayersToAll()
     out << Player::_CMD(_players);
     out << this->players;
 
-
     //---!!!it is default settings!!!---
     out.device()->seek(qint64(0));
     out << qint64(data.size() - sizeof(qint64));
