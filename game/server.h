@@ -17,7 +17,8 @@ class Server : public QObject
 {
     Q_OBJECT
 public:
-    explicit Server(quint16 port_s = 1100, quint16 port_p = 2201, quint16 port_l = 2200, QObject *parent = 0);
+    explicit Server(QObject *parent = 0, quint16 port_s = 1100, quint16 port_p = 2201, quint16 port_l = 2200);
+    ~Server();
 
     //main func of the server
     bool start();//start the server

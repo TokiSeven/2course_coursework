@@ -25,6 +25,7 @@ public slots:
     void slot_position(Player);
     void slot_update();
     void slot_game_start();
+    void slot_close();
 
 protected:
     //sfml

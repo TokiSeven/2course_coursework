@@ -121,9 +121,6 @@ void Game_net::checkData(QDataStream &in)
 
 void Game_net::slot_game_close()
 {
-    emit signal_closed();
-    //    if (this)
-    //        delete this;
 }
 
 void Game_net::slot_update()

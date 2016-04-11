@@ -19,8 +19,6 @@ Container::~Container()
 void Container::slot_game_close()
 {
     emit signal_closed();
-    //    if (this)
-    //        delete this;
 }
 
 void Container::updatePlayers(QList<Player> players)

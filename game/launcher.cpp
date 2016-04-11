@@ -23,6 +23,12 @@ void Launcher::closeEvent(QCloseEvent *event)
         this->win_connect->close();
         delete this->win_connect;
     }
+    if (this->serv)
+    {
+        if (this->serv->getServerStatus())
+            this->serv->stop();
+        delete this->serv;
+    }
     event->accept();
 }
 
@@ -47,7 +53,7 @@ void Launcher::on_button_create_clicked()
             this->serv->stop();
         delete this->serv;
     }
-    this->serv = new Server;
+    this->serv = new Server(this);
     this->serv->start();
     this->win_connect->getLauncher()->connectToServer("127.0.0.1", "SERVER");
 }

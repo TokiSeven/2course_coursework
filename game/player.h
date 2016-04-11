@@ -62,8 +62,6 @@ public:
 
     friend QDataStream &operator >>(QDataStream &in, Player &pl)
     {
-        //in.setFloatingPointPrecision(QDataStream::floatingPointPrecision());//need for float (in qt version >= 4.6)
-
         QString name;
         float x;
         float y;
@@ -121,7 +119,6 @@ public:
 
 signals:
     void changed_update(Player*);
-    void changed_fire(Player*);
 
 private:
     bool online;

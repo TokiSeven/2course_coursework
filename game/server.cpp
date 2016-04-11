@@ -3,7 +3,7 @@
 //                          ===============
 //                          <<__CONSTRUCTOR
 //                          ===============
-Server::Server(quint16 port_s, quint16 port_p, quint16 port_l, QObject *parent) : QObject(parent)
+Server::Server(QObject *parent, quint16 port_s, quint16 port_p, quint16 port_l) : QObject(parent)
 {
     this->udp_p_port = port_p;
     this->udp_s_port = port_s;
@@ -13,6 +13,12 @@ Server::Server(quint16 port_s, quint16 port_p, quint16 port_l, QObject *parent) 
     this->timer_to_ask.setInterval(3000);
     this->timer_to_ask.start();
     connect(&timer_to_ask, SIGNAL(timeout()), this, SLOT(checkWhoIsHere()));
+}
+
+Server::~Server()
+{
+    if (server_status)
+        delete this->socServer;
 }
 
 //                          =================

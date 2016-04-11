@@ -56,7 +56,10 @@ void Game_graphic::draw()//draw on the window all that we have
 void Game_graphic::events(sf::Event &event)//when something was done (for example, pressed key or mouse)
 {
     if (event.type == sf::Event::Closed)
+    {
+        emit signal_game_closed();
         window->close();
+    }
     if (event.type == sf::Event::KeyPressed)
     {
         Player pl(cont->getPlayer_current());
@@ -117,6 +120,11 @@ void Game_graphic::slot_update()
 void Game_graphic::slot_game_start()
 {
     this->game_start();
+}
+
+void Game_graphic::slot_close()
+{
+    this->window->close();
 }
 
 //================================================================================================
