@@ -13,25 +13,24 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        launcher.cpp \
     container.cpp \
     game_graphic.cpp \
     game_net.cpp \
-    launcher_connect.cpp \
     mainwindow_connect.cpp \
     player.cpp \
-    server.cpp
+    ../server/network_main.cpp \
+    api.cpp
 
-HEADERS  += launcher.h \
+HEADERS  += \
     container.h \
     game_graphic.h \
     game_net.h \
-    launcher_connect.h \
     mainwindow_connect.h \
     player.h \
-    server.h
+    ../server/network_main.h \
+    api.h
 
-FORMS    += launcher.ui \
+FORMS    += \
     mainwindow_connect.ui
 
 DISTFILES += \

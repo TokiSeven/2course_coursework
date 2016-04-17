@@ -65,3 +65,8 @@ void Container::updatePlayer(Player pl)
         }
     }
 }
+
+void Container::setServerIp(QHostAddress ip)
+{
+    this->server_ip = ip;
+}

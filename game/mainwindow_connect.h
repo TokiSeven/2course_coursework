@@ -2,7 +2,7 @@
 #define MAINWINDOW_CONNECT_H
 
 #include <QMainWindow>
-#include "launcher_connect.h"
+#include "api.h"
 
 namespace Ui {
 class MainWindow_connect;
@@ -15,20 +15,20 @@ class MainWindow_connect : public QMainWindow
 public:
     explicit MainWindow_connect(QWidget *parent = 0);
     ~MainWindow_connect();
-    Launcher_connect *getLauncher()const{return this->launch;}
 
 signals:
     void signal_closed();
 
 private:
+    API *api;
     Ui::MainWindow_connect *ui;
-    Launcher_connect *launch;
 
 private slots:
     //network
     void answerTrue();
     void answerFalse();
     void serverTimeout();
+
     //void closeEvent(QCloseEvent *);
     void slot_game_close();
 

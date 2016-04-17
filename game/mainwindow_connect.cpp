@@ -1,20 +1,19 @@
 #include "mainwindow_connect.h"
 #include "ui_mainwindow_connect.h"
+#include "api.h"
 
 MainWindow_connect::MainWindow_connect(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow_connect)
 {
     ui->setupUi(this);
-    launch = new Launcher_connect;
 
-    connect(launch, SIGNAL(connected()), this, SLOT(answerTrue()));
-    connect(launch, SIGNAL(disconnected()), this, SLOT(serverTimeout()));
-    connect(launch, SIGNAL(nick_incorrect()), this, SLOT(answerFalse()));
+    this->api = new API(this);
 
-    connect(launch, SIGNAL(signal_closed()), this, SLOT(slot_game_close()));
 
-    connect(this, SIGNAL(signal_closed()), launch, SLOT(slot_game_close()));
+    connect(api->getGameNetwork(), SIGNAL(connected()), this, SLOT(answerTrue()));
+    connect(api->getGameNetwork(), SIGNAL(disconnected()), this, SLOT(serverTimeout()));
+    connect(api->getGameNetwork(), SIGNAL(nick_incorrect()), this, SLOT(answerFalse()));
 }
 
 MainWindow_connect::~MainWindow_connect()
@@ -24,7 +23,7 @@ MainWindow_connect::~MainWindow_connect()
 
 void MainWindow_connect::on_button_connect_clicked()
 {
-    launch->connectToServer(ui->line_server_ip->text(), ui->line_nick->text());
+    api->getGameNetwork()->connectToServer(ui->line_server_ip->text(), ui->line_nick->text());
     ui->label_status->setText(QString::fromStdString("Connecting..."));
 }
 
@@ -39,7 +38,8 @@ void MainWindow_connect::answerTrue()
     ui->line_nick->setEnabled(false);
     ui->line_server_ip->setEnabled(false);
     ui->button_connect->setEnabled(false);
-    launch->startGame();
+    api->startGame();
+    //this->close();
 }
 
 void MainWindow_connect::serverTimeout()

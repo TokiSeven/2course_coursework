@@ -9,13 +9,15 @@ class Container : public QObject
 {
     Q_OBJECT
 public:
-    explicit Container(QString pl_name, QHostAddress s_ip, quint16 s_port = 1100, quint16 p_port = 2201, QObject *parent = 0);
+    explicit Container(QString pl_name, QHostAddress s_ip, quint16 s_port = 1100, quint16 p_port = 2200, QObject *parent = 0);
     ~Container();
 
     void updatePlayers(QList<Player> players);
     void addPlayer(Player player);
     void deletePlayer(int num);
     void updatePlayer(Player pl);
+
+    void setServerIp(QHostAddress);
 
     inline QList<Player> getPlayer_all()const{return this->players;}
     inline Player getPlayer_current()const{return this->pl;}

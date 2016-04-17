@@ -1,27 +1,25 @@
 #ifndef GAME_NET_H
 #define GAME_NET_H
 
-#include <QObject>
 #include "container.h"
-#include <QUdpSocket>
-#include <QString>
-#include <QDataStream>
 #include <QTimer>
+#include "../server/network_main.h"
 
-class Game_net : public QObject
+class Game_net : public network_main
 {
     Q_OBJECT
 public:
     explicit Game_net(Container *cont, QObject *parent = 0);
     ~Game_net();
 
-    void send(void (Game_net::*fnc)(QDataStream &));
-    void sendPlayer(QDataStream&);//do it, if player move
-    void sendOnline(QDataStream&);//do it on timer
+    void connectToServer(const QString serv_ip, QString pl_name);//connect to server on ip "serv_ip"
 
 signals:
     void signal_closed();
     void signal_update();
+    void connected();
+    void disconnected();
+    void nick_incorrect();
 
 public slots:
     void slot_game_close();
@@ -29,19 +27,21 @@ public slots:
 
 private slots:
     void send_online();
-    void readDatagramUdp();
-    //void slot_time_out();
+    void timeOut();
+
+protected:
+    void check_data(QDataStream &, QHostAddress);
 
 private:
-    void checkData(QDataStream&);
+    void sendPlayer();//do it, if player move
+    void sendOnline();//do it on timer
+
     int searchPlayer(QHostAddress, QString);
 
-    QTimer timer;
+    QTimer timer, timer_answer;
     QTimer timer_server_answer;//it will be, if server goes offline
 
     Container *cont;
-    QUdpSocket *soc;
-    quint16 p_port;
 };
 
 #endif // GAME_NET_H

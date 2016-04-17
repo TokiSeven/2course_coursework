@@ -124,6 +124,7 @@ void Game_graphic::slot_game_start()
 
 void Game_graphic::slot_close()
 {
+    emit signal_game_closed();
     this->window->close();
 }
 
