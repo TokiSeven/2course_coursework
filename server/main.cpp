@@ -1,13 +1,11 @@
-#include <QCoreApplication>
-#include "server.h"
+#include <QApplication>
+#include "dialog.h"
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
-
-    Server *serv = new Server;
-
-    serv->socketListen();
+    QApplication a(argc, argv);
+    Dialog w;
+    w.show();
 
     return a.exec();
 }

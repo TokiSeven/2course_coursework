@@ -1,7 +1,9 @@
 #include "game_graphic.h"
 
-Game_graphic::Game_graphic(Container *cont)//constructor, set size of window and it's name
+Game_graphic::Game_graphic(Container *cont, QObject *parent)//constructor, set size of window and it's name
+    : QObject(parent)
 {
+    qDebug() << QString("Game_graphic-->> ") + "Created.";
     this->cont = cont;
 
     this->windowHeight = 400;

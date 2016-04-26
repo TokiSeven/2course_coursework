@@ -1,11 +1,12 @@
-#include "mainwindow_connect.h"
 #include <QApplication>
+#include "api.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MainWindow_connect w;
-    w.show();
+
+    API api;
+    api.getMainWindow()->show();
 
     return a.exec();
 }

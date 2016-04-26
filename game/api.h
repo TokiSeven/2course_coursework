@@ -5,6 +5,7 @@
 #include "container.h"
 #include "game_net.h"
 #include "game_graphic.h"
+#include "mainwindow_connect.h"
 #include <QThread>
 
 class API : public QObject
@@ -18,15 +19,26 @@ public:
     inline Game_net* getGameNetwork()const{return this->game_net;}
     inline Game_graphic* getGameGraphics()const{return this->game_graph;}
     inline Container* getGameContainer()const{return this->cont;}
+    inline MainWindow_connect* getMainWindow()const{return this->mw;}
 signals:
 
-public slots:
+private slots:
+    void slot_startGame();
+    void slot_gameClose();
 
-private:
+protected:
+    //for data
+    void connect_Game_net();
+    void connect_Game_graphic();
+    void connect_Container();
+    void connect_MainWindow_cnnect();
+    void connect_all();
+
     //for game
     Game_net *game_net;
     Game_graphic *game_graph;
     Container *cont;
+    MainWindow_connect *mw;
 };
 
 #endif // API_H

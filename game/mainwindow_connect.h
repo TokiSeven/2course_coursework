@@ -2,7 +2,6 @@
 #define MAINWINDOW_CONNECT_H
 
 #include <QMainWindow>
-#include "api.h"
 
 namespace Ui {
 class MainWindow_connect;
@@ -18,9 +17,11 @@ public:
 
 signals:
     void signal_closed();
+    void signal_button_connect(QString nick, QString server);
 
 private:
-    API *api;
+    QString player_name;
+    QString server_ip;
     Ui::MainWindow_connect *ui;
 
 private slots:

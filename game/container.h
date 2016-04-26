@@ -20,7 +20,9 @@ public:
     void setServerIp(QHostAddress);
 
     inline QList<Player> getPlayer_all()const{return this->players;}
+    inline QList<Player>* getPlayer_all_pointer(){return &this->players;}
     inline Player getPlayer_current()const{return this->pl;}
+    inline Player* getPlayer_current_pointer(){return &this->pl;}
     inline QHostAddress getServerIp()const{return this->server_ip;}
     inline quint16 getServerPort()const{return this->server_port;}
     inline quint16 getPlayerPort()const{return this->player_port;}

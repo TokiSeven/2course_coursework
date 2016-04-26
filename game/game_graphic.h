@@ -12,7 +12,7 @@ class Game_graphic : public QObject
     Q_OBJECT
 
 public:
-    Game_graphic(Container *cont);
+    Game_graphic(Container *cont, QObject *parent = 0);
     ~Game_graphic();
 
     void game_start();

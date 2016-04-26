@@ -24,6 +24,7 @@ signals:
 public slots:
     void slot_game_close();
     void slot_update();
+    void slot_connect(QString nick, QString server);
 
 private slots:
     void send_online();
