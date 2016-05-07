@@ -56,6 +56,7 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
             players[num].setIp(ip);
 
             sendPlayer(players[num]);
+            emit signal_newPlayer(players[num].getName());
         }
         return;
     }
@@ -70,9 +71,9 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
         j = players.size() - 1;
     }
 
-    //================================================================
-    //                            <<__big 'if' for command from player
-    //================================================================
+    //=================================================================
+    //                            <<__big 'if' for commands from player
+    //=================================================================
     if (cmd == _update)
     {
         Player pl;
@@ -139,7 +140,11 @@ void Server::checkWhoIsHere()
         for (int i = 0; i < players.size();)
         {
             if (!players[i].getOnline())
+            {
+                QString temp = players[i].getName();
                 players.removeAt(i);
+                emit signal_deletePlayer(temp);
+            }
             else
                 i++;
         }

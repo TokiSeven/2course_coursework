@@ -31,11 +31,7 @@ void API::slot_startGame()
 
 void API::slot_gameClose()
 {
-    delete this->game_graph;
-    delete this->game_net;
-    delete this->mw;
-    delete this->cont;
-
+    this->mw->close();
     this->deleteLater();
 }
 
@@ -53,6 +49,7 @@ void API::connect_Game_net()
 
 void API::connect_Game_graphic()
 {
+    connect(this->getGameGraphics(), SIGNAL(signal_update()), this->getGameNetwork(), SLOT(slot_update()));
     connect(this->getGameGraphics(), SIGNAL(signal_game_closed()), this, SLOT(slot_gameClose()));
 }
 

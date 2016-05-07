@@ -15,6 +15,10 @@ public:
     //inline selectors
     inline const QList<Player> getPlayers()const{return this->players;}//return all players
 
+signals:
+    void signal_newPlayer(QString name);
+    void signal_deletePlayer(QString name);
+
 private slots:
     void checkWhoIsHere();//send on timer to all players and check their status
 

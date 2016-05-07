@@ -49,6 +49,7 @@ void Game_net::sendOnline()
     QByteArray data;
     QDataStream out(&data, QIODevice::WriteOnly);
 
+    out << this->cont->getPlayer_current().getName();
     out << Player::_CMD(_online);
 
     this->sendMessage(data, cont->getServerIp());

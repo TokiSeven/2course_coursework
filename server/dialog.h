@@ -16,6 +16,10 @@ public:
     explicit Dialog(QWidget *parent = 0);
     ~Dialog();
 
+private slots:
+    void slot_addPlayer(QString name);
+    void slot_deletePlayer(QString name);
+
 private:
     Server *serv;
     Ui::Dialog *ui;
