@@ -31,7 +31,8 @@ protected:
     void connect_Game_net();
     void connect_Game_graphic();
     void connect_Container();
-    void connect_MainWindow_cnnect();
+    void connect_MainWindow_connect();
+    void connect_Player_Current();
     void connect_all();
 
     //for game

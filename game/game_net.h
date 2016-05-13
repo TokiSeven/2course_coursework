@@ -41,6 +41,7 @@ private:
 
     QTimer timer, timer_answer;
     QTimer timer_server_answer;//it will be, if server goes offline
+    QTimer timer_sendPlayer;
 
     Container *cont;
 };

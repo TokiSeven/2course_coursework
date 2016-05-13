@@ -9,13 +9,15 @@ Game_net::Game_net(Container *cont, QObject *parent)
     this->socketListen();
 
     timer.setInterval(1000);
-
+    timer_sendPlayer.setInterval(1100);
     timer_server_answer.setInterval(3000);
     timer_answer.setInterval(2000);
 
     connect(&timer, SIGNAL(timeout()), this, SLOT(send_online()));
     connect(&timer_server_answer, SIGNAL(timeout()), this, SLOT(slot_game_close()));
     connect(&timer_answer, SIGNAL(timeout()), this, SLOT(timeOut()));
+    connect(&timer_sendPlayer, SIGNAL(timeout()), this, SLOT(slot_update()));
+    connect(this, SIGNAL(connected()), &timer_sendPlayer, SLOT(start()));
     //connect(cont, SIGNAL(signal_update_all()), this, SLOT(slot_update()));
 }
 
@@ -37,6 +39,7 @@ void Game_net::sendPlayer()
     QByteArray data;
     QDataStream out(&data, QIODevice::WriteOnly);
 
+    out << cont->getPlayer_current().getName();
     out << Player::_CMD(_update);
     out << cont->getPlayer_current();
 

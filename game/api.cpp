@@ -37,36 +37,49 @@ void API::slot_gameClose()
 
 void API::connect_Game_net()
 {
-    connect(this->getGameNetwork(), SIGNAL(connected()), this->getMainWindow(), SLOT(answerTrue()));
-    connect(this->getGameNetwork(), SIGNAL(connected()), this, SLOT(slot_startGame()));
+    Game_net *game = this->getGameNetwork();
 
-    connect(this->getGameNetwork(), SIGNAL(disconnected()), this->getMainWindow(), SLOT(serverTimeout()));
+    connect(game, SIGNAL(connected()), this->getMainWindow(), SLOT(answerTrue()));
+    connect(game, SIGNAL(connected()), this, SLOT(slot_startGame()));
 
-    connect(this->getGameNetwork(), SIGNAL(nick_incorrect()), this->getMainWindow(), SLOT(answerFalse()));
+    connect(game, SIGNAL(disconnected()), this->getMainWindow(), SLOT(serverTimeout()));
 
-    connect(this->getGameNetwork(), SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
+    connect(game, SIGNAL(nick_incorrect()), this->getMainWindow(), SLOT(answerFalse()));
+
+    connect(game, SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
 }
 
 void API::connect_Game_graphic()
 {
-    connect(this->getGameGraphics(), SIGNAL(signal_update()), this->getGameNetwork(), SLOT(slot_update()));
-    connect(this->getGameGraphics(), SIGNAL(signal_game_closed()), this, SLOT(slot_gameClose()));
+    Game_graphic *game = this->getGameGraphics();
+
+    connect(game, SIGNAL(signal_game_closed()), this, SLOT(slot_gameClose()));
 }
 
 void API::connect_Container()
 {
-    connect(this->getGameContainer(), SIGNAL(signal_update_current()), this->getGameNetwork(), SLOT(slot_update()));
+    Container *cont = this->getGameContainer();
 
-    connect(this->getGameContainer(), SIGNAL(signal_update_all()), this->getGameGraphics(), SLOT(slot_update()));
+    connect(cont, SIGNAL(signal_update_current()), this->getGameNetwork(), SLOT(slot_update()));
 
-    connect(this->getGameContainer(), SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
+    connect(cont, SIGNAL(signal_update_all()), this->getGameGraphics(), SLOT(slot_update()));
+
+    connect(cont, SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
 }
 
-void API::connect_MainWindow_cnnect()
+void API::connect_MainWindow_connect()
 {
-    connect(this->getMainWindow(), SIGNAL(signal_button_connect(QString, QString)), this->getGameNetwork(), SLOT(slot_connect(QString, QString)));
+    MainWindow_connect *launcher = this->getMainWindow();
+    connect(launcher, SIGNAL(signal_button_connect(QString, QString)), this->getGameNetwork(), SLOT(slot_connect(QString, QString)));
 
-    connect(this->getMainWindow(), SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
+    connect(launcher, SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
+}
+
+void API::connect_Player_Current()
+{
+    Player *player = this->getGameContainer()->getPlayer_current_pointer();
+
+    connect(player, SIGNAL(changed_update(Player*)), this->getGameNetwork(), SLOT(slot_update()));
 }
 
 void API::connect_all()
@@ -74,5 +87,5 @@ void API::connect_all()
     this->connect_Game_graphic();
     this->connect_Game_net();
     this->connect_Container();
-    this->connect_MainWindow_cnnect();
+    this->connect_MainWindow_connect();
 }

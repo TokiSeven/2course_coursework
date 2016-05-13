@@ -21,7 +21,9 @@ Dialog::~Dialog()
 
 void Dialog::slot_addPlayer(QString name)
 {
-    ui->listWidget->addItem(name);
+    QString str = name + " || ";
+    str += this->serv->getPlayers().last().getX();
+    ui->listWidget->addItem(str);
 }
 
 void Dialog::slot_deletePlayer(QString name)

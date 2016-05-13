@@ -55,6 +55,7 @@ void Container::updatePlayer(Player pl)
     int num = players.indexOf(pl);
     if (num != -1)
     {
+        qDebug() << "OTHER";
         players[num](pl);
         emit signal_update_current();
     }
@@ -62,11 +63,13 @@ void Container::updatePlayer(Player pl)
     {
         if (this->pl.getName() == pl.getName())
         {
+            qDebug() << "CURRENT";
             this->pl(pl);
             emit signal_update_all();
         }
         else
         {
+            qDebug() << "OTHER 2";
             this->players.append(pl);
             emit signal_update_current();
         }

@@ -139,6 +139,7 @@ void Server::checkWhoIsHere()
         int size = players.size();
         for (int i = 0; i < players.size();)
         {
+            qDebug() << "HERE!";
             if (!players[i].getOnline())
             {
                 QString temp = players[i].getName();
