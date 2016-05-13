@@ -1,6 +1,7 @@
 #include "mainwindow_connect.h"
 #include "ui_mainwindow_connect.h"
 #include <QDebug>
+#include <QFile>
 
 MainWindow_connect::MainWindow_connect(QWidget *parent) :
     QMainWindow(parent),
@@ -8,6 +9,7 @@ MainWindow_connect::MainWindow_connect(QWidget *parent) :
 {
     qDebug() << QString("MainWindow_connect-->> ") + "Created.";
     ui->setupUi(this);
+    this->loadServerIp();
 }
 
 MainWindow_connect::~MainWindow_connect()
@@ -16,11 +18,49 @@ MainWindow_connect::~MainWindow_connect()
     delete ui;
 }
 
+void MainWindow_connect::loadServerIp()
+{
+    qDebug() << QString("MainWindow_connect-->> ") + "loadServerIp()";
+    QFile file("RealmList.txt");
+
+    if (!file.exists())
+    {
+        qDebug() << QString("MainWindow_connect-->> ") + "loadServerIp()" + "-->> File does not exist.";
+        if (file.open(QIODevice::WriteOnly))
+        {
+            qDebug() << QString("MainWindow_connect-->> ") + "loadServerIp()" + "-->> File created.";
+            file.write("127.0.0.1");
+            this->server_ip = "127.0.0.1";
+            file.close();
+        }
+        else
+        {
+            qDebug() << QString("MainWindow_connect-->> ") + "loadServerIp()" + "-->> File does not created.";
+            this->server_ip = "127.0.0.1";
+        }
+    }
+    else
+    {
+        qDebug() << QString("MainWindow_connect-->> ") + "loadServerIp()" + "-->> File exist.";
+        if (file.open(QIODevice::ReadOnly))
+        {
+            qDebug() << QString("MainWindow_connect-->> ") + "loadServerIp()" + "-->> File opened.";
+            this->server_ip = QString(file.readAll());
+            file.close();
+        }
+        else
+        {
+            qDebug() << QString("MainWindow_connect-->> ") + "loadServerIp()" + "-->> File did not open.";
+            this->server_ip = "127.0.0.1";
+        }
+    }
+    qDebug() << QString("MainWindow_connect-->> ") + "loadServerIp()" + "-->> Server ip: " + this->server_ip;
+}
+
 void MainWindow_connect::on_button_connect_clicked()
 {
     qDebug() << QString("MainWindow_connect-->> ") + "on_button_connect_clicked()";
     ui->label_status->setText(QString::fromStdString("Connecting..."));
-    this->server_ip = ui->line_server_ip->text();
     this->player_name = ui->line_nick->text();
     emit signal_button_connect(this->player_name, this->server_ip);
 }
@@ -36,7 +76,6 @@ void MainWindow_connect::answerTrue()
     qDebug() << QString("MainWindow_connect-->> ") + "answerTrue()";
     ui->label_status->setText(QString::fromStdString("Starting the game..."));
     ui->line_nick->setEnabled(false);
-    ui->line_server_ip->setEnabled(false);
     ui->button_connect->setEnabled(false);
 }
 

@@ -1,4 +1,5 @@
 #include "game_graphic.h"
+#include <QThread>
 
 Game_graphic::Game_graphic(Container *cont, QObject *parent)//constructor, set size of window and it's name
     : QObject(parent)
@@ -8,9 +9,9 @@ Game_graphic::Game_graphic(Container *cont, QObject *parent)//constructor, set s
 
     this->windowHeight = 400;
     this->windowWidth = 600;
-    this->windowName = "NoName";
+    this->windowName = "Anime Fighting v 4.0";
 
-    connect(cont, SIGNAL(signal_update_current()), this, SLOT(slot_update()));
+    //connect(cont, SIGNAL(signal_update_all()), this, SLOT(slot_update()));
 }
 
 Game_graphic::~Game_graphic()//destructor
@@ -87,6 +88,7 @@ void Game_graphic::game_start()//main function of game
 
     while (window->isOpen())
     {
+        this->initialization();
         sf::Event event;
         while (window->pollEvent(event))
         {

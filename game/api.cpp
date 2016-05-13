@@ -70,6 +70,7 @@ void API::connect_Container()
 void API::connect_MainWindow_connect()
 {
     MainWindow_connect *launcher = this->getMainWindow();
+
     connect(launcher, SIGNAL(signal_button_connect(QString, QString)), this->getGameNetwork(), SLOT(slot_connect(QString, QString)));
 
     connect(launcher, SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
@@ -78,8 +79,6 @@ void API::connect_MainWindow_connect()
 void API::connect_Player_Current()
 {
     Player *player = this->getGameContainer()->getPlayer_current_pointer();
-
-    connect(player, SIGNAL(changed_update(Player*)), this->getGameNetwork(), SLOT(slot_update()));
 }
 
 void API::connect_all()

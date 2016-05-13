@@ -20,6 +20,7 @@ signals:
     void signal_button_connect(QString nick, QString server);
 
 private:
+    void loadServerIp();
     QString player_name;
     QString server_ip;
     Ui::MainWindow_connect *ui;

@@ -120,6 +120,7 @@ void Server::sendPlayer(Player pl)
     QByteArray data;
     QDataStream out(&data, QIODevice::WriteOnly);
 
+    out << pl.getName();
     out << Player::_CMD(_update);
     out << pl;
 
