@@ -67,8 +67,13 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
 
     if (j == -1)
     {
-        players.append(*(new Player(ip, pl_name)));
-        j = players.size() - 1;
+//        players.append(*(new Player(ip, pl_name)));
+//        j = players.size() - 1;
+        return;
+    }
+    else
+    {
+        players[j].setOnline(true);
     }
 
     //=================================================================
@@ -136,11 +141,13 @@ void Server::checkWhoIsHere()
 {
     if (this->getStatus())
     {
-        //delete all, who before this did not asked that he is online
+        //delete all, who before this did not ask that he is online
         int size = players.size();
         for (int i = 0; i < players.size();)
         {
             qDebug() << "HERE!";
+            qDebug() << QString::number(i);
+            qDebug() << "Before size = " + QString::number(players.size());
             if (!players[i].getOnline())
             {
                 QString temp = players[i].getName();
@@ -149,6 +156,7 @@ void Server::checkWhoIsHere()
             }
             else
                 i++;
+            qDebug() << "After size = " + QString::number(players.size());
         }
 
         //reset status of all players

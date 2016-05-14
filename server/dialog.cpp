@@ -21,14 +21,15 @@ Dialog::~Dialog()
 
 void Dialog::slot_addPlayer(QString name)
 {
-    QString str = name + " || ";
-    str += this->serv->getPlayers().last().getX();
+    QString str = name;
     ui->listWidget->addItem(str);
 }
 
 void Dialog::slot_deletePlayer(QString name)
 {
+    qDebug() << "DIALOG :: " + name;
     QStringList str;
     for (int i = 0; i < serv->getPlayers().size(); str.append(serv->getPlayers()[i++].getName()));
+    ui->listWidget->clear();
     ui->listWidget->addItems(str);
 }

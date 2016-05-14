@@ -9,9 +9,9 @@ Game_net::Game_net(Container *cont, QObject *parent)
     this->socketListen();
 
     timer.setInterval(1000);
-    timer_sendPlayer.setInterval(1100);
-    timer_server_answer.setInterval(3000);
-    timer_answer.setInterval(2000);
+    timer_sendPlayer.setInterval(333);
+    timer_server_answer.setInterval(3157);
+    timer_answer.setInterval(2643);
 
     connect(&timer, SIGNAL(timeout()), this, SLOT(send_online()));
     connect(&timer_server_answer, SIGNAL(timeout()), this, SLOT(slot_game_close()));
@@ -118,6 +118,7 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
 void Game_net::slot_game_close()
 {
     qDebug() << QString("Game_net-->> ") + "slot_game_close()";
+    emit signal_closed();
 }
 
 void Game_net::slot_update()
