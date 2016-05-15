@@ -8,7 +8,7 @@ Game_net::Game_net(Container *cont, QObject *parent)
 
     this->socketListen();
 
-    timer_sendPlayer.setInterval(333);
+    timer_sendPlayer.setInterval(111);
     timer_server_answer.setInterval(3157);
     timer_answer.setInterval(2643);
 
@@ -33,7 +33,6 @@ Game_net::~Game_net()
 //                          =====================
 void Game_net::sendPlayer()
 {
-    qDebug() << QString("Game_net-->> ") + "sendPlayer()";
     QByteArray data;
     QDataStream out(&data, QIODevice::WriteOnly);
 
@@ -49,7 +48,6 @@ void Game_net::sendPlayer()
 //                          ==================
 void Game_net::check_data(QDataStream &in, QHostAddress IP)
 {
-    qDebug() << QString("Game_net-->> ") + "check_data()";
     QString pl_name, cmd_qs;
     in >> pl_name;
     in >> cmd_qs;
@@ -98,19 +96,16 @@ void Game_net::slot_game_close()
 
 void Game_net::slot_update()
 {
-    qDebug() << QString("Game_net-->> ") + "slot_update()";
     sendPlayer();
 }
 
 void Game_net::slot_connect(QString nick, QString server)
 {
-    qDebug() << QString("Game_net-->> ") + "slot_connect()";
     this->connectToServer(server, nick);
 }
 
 void Game_net::connectToServer(const QString serv_ip, QString pl_name)
 {
-    qDebug() << QString("Game_net-->> ") + "connectToServer()";
     this->cont->getPlayer_current_pointer()->setName(pl_name);
 
     QByteArray data;

@@ -26,7 +26,6 @@ void Container::slot_game_close()
 
 void Container::updatePlayers(QList<Player> players)
 {
-    qDebug() << QString("Container-->> ") + "updatePlayers()";
     players.clear();
     players.append(players);
     emit signal_update_all();
@@ -34,14 +33,12 @@ void Container::updatePlayers(QList<Player> players)
 
 void Container::addPlayer(Player player)
 {
-    qDebug() << QString("Container-->> ") + "addPlayer()";
     players.append(player);
     emit signal_update_current();
 }
 
 void Container::deletePlayer(int num)
 {
-    qDebug() << QString("Container-->> ") + "deletePlayer()";
     if (num >= 0 && num < players.size())
     {
         players.removeAt(num);
@@ -51,11 +48,9 @@ void Container::deletePlayer(int num)
 
 void Container::updatePlayer(Player pl)
 {
-    qDebug() << QString("Container-->> ") + "updatePlayer()";
     int num = players.indexOf(pl);
     if (num != -1)
     {
-        qDebug() << "OTHER";
         players[num](pl);
         emit signal_update_current();
     }
@@ -63,13 +58,11 @@ void Container::updatePlayer(Player pl)
     {
         if (this->pl.getName() == pl.getName())
         {
-            qDebug() << "CURRENT";
             this->pl(pl);
             emit signal_update_all();
         }
         else
         {
-            qDebug() << "OTHER 2";
             this->players.append(pl);
             emit signal_update_current();
         }
@@ -78,6 +71,5 @@ void Container::updatePlayer(Player pl)
 
 void Container::setServerIp(QHostAddress ip)
 {
-    qDebug() << QString("Container-->> ") + "setServerIp()";
     this->server_ip = ip;
 }
