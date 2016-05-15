@@ -7,8 +7,8 @@
 Server::Server(QObject *parent, quint16 port_s, quint16 port_l)
     : network_main(port_l, port_s, parent)
 {
-    this->timer_to_ask.setInterval(3000);
-    this->timer_to_ask.start();
+    this->timer_to_ask.setInterval(5000);
+    this->timer_to_ask.start(5000);
     connect(&timer_to_ask, SIGNAL(timeout()), this, SLOT(checkWhoIsHere()));
 }
 
@@ -32,10 +32,7 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
 
     COMMAND cmd = Player::_CMD(cmd_qs);
 
-    qDebug() << QString("server >> NICK: ") + pl_name;
-    qDebug() << QString("       >> CMD: ") + cmd_qs;
-    qDebug() << QString("       >> IP: ") + ip.toString();
-    qDebug() << QString("");
+    qDebug() << QString("server >> NICK: ") + pl_name + QString("::") + cmd_qs;
 
     if (cmd == _login)
     {
@@ -66,15 +63,9 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
     int j = searchPlayer(ip, pl_name);
 
     if (j == -1)
-    {
-//        players.append(*(new Player(ip, pl_name)));
-//        j = players.size() - 1;
         return;
-    }
     else
-    {
         players[j].setOnline(true);
-    }
 
     //=================================================================
     //                            <<__big 'if' for commands from player
@@ -86,10 +77,6 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
         players[j](pl);
         players[j].setIp(ip);
         sendPlayer(players[j]);
-    }
-    else if (cmd == _online)
-    {
-        players[j].setOnline(true);
     }
 }
 
@@ -141,13 +128,11 @@ void Server::checkWhoIsHere()
 {
     if (this->getStatus())
     {
+        qDebug() << "CYCLE FOR PLAYERS TO DELETE OR NOT THEM";
         //delete all, who before this did not ask that he is online
         int size = players.size();
         for (int i = 0; i < players.size();)
         {
-            qDebug() << "HERE!";
-            qDebug() << QString::number(i);
-            qDebug() << "Before size = " + QString::number(players.size());
             if (!players[i].getOnline())
             {
                 QString temp = players[i].getName();
@@ -156,7 +141,6 @@ void Server::checkWhoIsHere()
             }
             else
                 i++;
-            qDebug() << "After size = " + QString::number(players.size());
         }
 
         //reset status of all players

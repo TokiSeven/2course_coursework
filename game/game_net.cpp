@@ -8,12 +8,10 @@ Game_net::Game_net(Container *cont, QObject *parent)
 
     this->socketListen();
 
-    timer.setInterval(1000);
     timer_sendPlayer.setInterval(333);
     timer_server_answer.setInterval(3157);
     timer_answer.setInterval(2643);
 
-    connect(&timer, SIGNAL(timeout()), this, SLOT(send_online()));
     connect(&timer_server_answer, SIGNAL(timeout()), this, SLOT(slot_game_close()));
     connect(&timer_answer, SIGNAL(timeout()), this, SLOT(timeOut()));
     connect(&timer_sendPlayer, SIGNAL(timeout()), this, SLOT(slot_update()));
@@ -46,27 +44,6 @@ void Game_net::sendPlayer()
     this->sendMessage(data, cont->getServerIp());
 }
 
-void Game_net::sendOnline()
-{
-    qDebug() << QString("Game_net-->> ") + "sendOnline()";
-    QByteArray data;
-    QDataStream out(&data, QIODevice::WriteOnly);
-
-    out << this->cont->getPlayer_current().getName();
-    out << Player::_CMD(_online);
-
-    this->sendMessage(data, cont->getServerIp());
-}
-
-//                          =================
-//                          <<__SENDING ONLINE_SLOT
-//                          =================
-void Game_net::send_online()
-{
-    qDebug() << QString("Game_net-->> ") + "send_online()";
-    sendOnline();
-}
-
 //                          ==================
 //                          <<__CHECK DATAGRAM
 //                          ==================
@@ -95,14 +72,12 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
     }
     else if (cmd == _login && pl_name == QString::fromStdString("SERVER"))
     {
-        timer.stop();
         QString ans;
         in >> ans;
         if (ans == QString::fromStdString("YES"))
         {
             this->cont->setServerIp(IP);
 
-            timer.start();
             timer_server_answer.start();
             timer_answer.stop();
 
@@ -118,7 +93,7 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
 void Game_net::slot_game_close()
 {
     qDebug() << QString("Game_net-->> ") + "slot_game_close()";
-    emit signal_closed();
+    //emit signal_closed();
 }
 
 void Game_net::slot_update()

@@ -27,7 +27,6 @@ public slots:
     void slot_connect(QString nick, QString server);
 
 private slots:
-    void send_online();
     void timeOut();
 
 protected:
@@ -35,11 +34,10 @@ protected:
 
 private:
     void sendPlayer();//do it, if player move
-    void sendOnline();//do it on timer
 
     int searchPlayer(QHostAddress, QString);
 
-    QTimer timer, timer_answer;
+    QTimer timer_answer;
     QTimer timer_server_answer;//it will be, if server goes offline
     QTimer timer_sendPlayer;
 
