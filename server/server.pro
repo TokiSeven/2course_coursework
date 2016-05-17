@@ -12,13 +12,13 @@ CONFIG -= console
 
 SOURCES += main.cpp \
     server.cpp \
-    ../game/player.cpp \
+    ../game/player_old.cpp \
     network_main.cpp \
     dialog.cpp
 
 HEADERS += \
     server.h \
-    ../game/player.h \
+    ../game/player_old.h \
     network_main.h \
     dialog.h
 

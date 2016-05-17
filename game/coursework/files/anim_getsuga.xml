@@ -1,0 +1,10 @@
+<!DOCTYPE SpriteDecomposer>
+<sprites image="Ichigo.png" transparentColor="008000">
+ <animation title="move" delay="150">
+  <cut w="44" x="430" y="3094" h="96" row="1" col="1"/>
+  <cut w="48" x="491" y="3094" h="96" row="1" col="1"/>
+ </animation>
+ <animation title="explode" delay="150">
+  <cut w="48" x="9" y="3731" h="80" row="1" col="1"/>
+ </animation>
+</sprites>

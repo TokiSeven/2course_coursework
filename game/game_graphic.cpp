@@ -7,9 +7,9 @@ Game_graphic::Game_graphic(Container *cont, QObject *parent)//constructor, set s
     qDebug() << QString("Game_graphic-->> ") + "Created.";
     this->cont = cont;
 
-    this->windowHeight = 400;
-    this->windowWidth = 600;
-    this->windowName = "Anime Fighting v 4.0";
+    this->windowHeight = 280;
+    this->windowWidth = 450;
+    this->windowName = "Anime Fighting v 5.0";
 
     //connect(cont, SIGNAL(signal_update_all()), this, SLOT(slot_update()));
 }
@@ -22,6 +22,10 @@ Game_graphic::~Game_graphic()//destructor
 }
 
 void Game_graphic::initialization()
+{
+}
+
+void Game_graphic::updatePlayersAll()
 {
     pl_all.clear();
 
@@ -65,7 +69,7 @@ void Game_graphic::events(sf::Event &event)//when something was done (for exampl
     }
     if (event.type == sf::Event::KeyPressed)
     {
-        Player pl(cont->getPlayer_current());
+        Player_old pl(cont->getPlayer_current());
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             pl.setX(pl.getX() - 1);
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -82,32 +86,34 @@ void Game_graphic::events(sf::Event &event)//when something was done (for exampl
 void Game_graphic::game_start()//main function of game
 {
     //sf::RenderWindow window(sf::VideoMode(this->windowWidth, this->windowHeight), this->windowName.toStdString().c_str());
-    this->window = new sf::RenderWindow(sf::VideoMode(this->windowWidth, this->windowHeight), this->windowName.toStdString().c_str());
+//    this->window = new sf::RenderWindow(sf::VideoMode(this->windowWidth, this->windowHeight), this->windowName.toStdString().c_str());
 
-    this->initialization();
+//    this->initialization();
 
-    while (window->isOpen())
-    {
-        this->initialization();
-        sf::Event event;
-        while (window->pollEvent(event))
-        {
-            events(event);
-        }
+//    while (window->isOpen())
+//    {
+//        this->updatePlayersAll();
 
-        this->main_cycle();
+//        sf::Event event;
+//        while (window->pollEvent(event))
+//        {
+//            events(event);
+//        }
 
-        window->clear();
-        this->draw();
-        window->display();
-    }
+//        this->main_cycle();
+
+//        window->clear();
+//        this->draw();
+//        window->display();
+//    }
+    RunGame();
     emit signal_game_closed();
 }
 
 //================================================================================================
 //==========================================SLOTS(BEGIN)==========================================
 //================================================================================================
-void Game_graphic::slot_position(Player player)
+void Game_graphic::slot_position(Player_old player)
 {
     int num = cont->getPlayer_all().indexOf(player);
     if (num == -1)//if didn't been finded in all players (it will be yourself)

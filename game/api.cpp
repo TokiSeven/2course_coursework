@@ -78,7 +78,7 @@ void API::connect_MainWindow_connect()
 
 void API::connect_Player_Current()
 {
-    Player *player = this->getGameContainer()->getPlayer_current_pointer();
+    Player_old *player = this->getGameContainer()->getPlayer_current_pointer();
 }
 
 void API::connect_all()

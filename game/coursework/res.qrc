@@ -1,0 +1,26 @@
+<RCC>
+    <qresource prefix="/sounds">
+        <file>files/attack.wav</file>
+        <file>files/attack2.wav</file>
+        <file>files/bg.wav</file>
+        <file>files/getsuga.wav</file>
+        <file>files/hit.wav</file>
+        <file>files/spell.wav</file>
+        <file>files/explode.wav</file>
+        <file>files/jump.ogg</file>
+    </qresource>
+    <qresource prefix="/animations">
+        <file>files/anim_getsuga.xml</file>
+        <file>files/anim_ichigo.xml</file>
+    </qresource>
+    <qresource prefix="/images">
+        <file>files/images/bg.png</file>
+        <file>files/images/HealthBar.png</file>
+        <file>files/images/Ichigo.png</file>
+        <file>files/images/ichigo1.png</file>
+        <file>files/images/tileset1.png</file>
+    </qresource>
+    <qresource prefix="/map">
+        <file>files/map.tmx</file>
+    </qresource>
+</RCC>

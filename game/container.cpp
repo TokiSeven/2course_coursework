@@ -24,14 +24,14 @@ void Container::slot_game_close()
     emit signal_closed();
 }
 
-void Container::updatePlayers(QList<Player> players)
+void Container::updatePlayers(QList<Player_old> players)
 {
     players.clear();
     players.append(players);
     emit signal_update_all();
 }
 
-void Container::addPlayer(Player player)
+void Container::addPlayer(Player_old player)
 {
     players.append(player);
     emit signal_update_current();
@@ -46,7 +46,7 @@ void Container::deletePlayer(int num)
     }
 }
 
-void Container::updatePlayer(Player pl)
+void Container::updatePlayer(Player_old pl)
 {
     int num = players.indexOf(pl);
     if (num != -1)

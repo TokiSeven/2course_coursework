@@ -37,7 +37,7 @@ void Game_net::sendPlayer()
     QDataStream out(&data, QIODevice::WriteOnly);
 
     out << cont->getPlayer_current().getName();
-    out << Player::_CMD(_update);
+    out << Player_old::_CMD(_update);
     out << cont->getPlayer_current();
 
     this->sendMessage(data, cont->getServerIp());
@@ -51,20 +51,20 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
     QString pl_name, cmd_qs;
     in >> pl_name;
     in >> cmd_qs;
-    COMMAND cmd = Player::_CMD(cmd_qs);
+    COMMAND cmd = Player_old::_CMD(cmd_qs);
 
-    qDebug() << pl_name + "::" + Player::_CMD(cmd);
+    qDebug() << pl_name + "::" + Player_old::_CMD(cmd);
 
     if (cmd == _update)
     {
-        Player pl;
+        Player_old pl;
         in >> pl;
         cont->updatePlayer(pl);
     }
     else if (cmd == _players)
     {
         timer_server_answer.start();
-        QList<Player> players;
+        QList<Player_old> players;
         in >> players;
         cont->updatePlayers(players);
     }
@@ -112,7 +112,7 @@ void Game_net::connectToServer(const QString serv_ip, QString pl_name)
     QDataStream out(&data, QIODevice::WriteOnly);
 
     out << pl_name;
-    out << Player::_CMD(_login);
+    out << Player_old::_CMD(_login);
 
     this->sendMessage(data, QHostAddress(serv_ip));
 

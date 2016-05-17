@@ -3,9 +3,11 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QUdpSocket>
 #include "container.h"
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <list>
+#include "coursework/game.h"
 
 class Game_graphic : public QObject
 {
@@ -22,7 +24,7 @@ signals:
     void signal_game_closed();
 
 public slots:
-    void slot_position(Player);
+    void slot_position(Player_old);
     void slot_update();
     void slot_game_start();
     void slot_close();
@@ -30,6 +32,7 @@ public slots:
 protected:
     //sfml
     void initialization();
+    void updatePlayersAll();
     void main_cycle();
     void events(sf::Event&);
     void draw();
