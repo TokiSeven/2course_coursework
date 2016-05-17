@@ -1,8 +1,7 @@
 #ifndef BULLET_H
 #define BULLET_H
 
-#include "./entity.h"
-
+#include "entity.h"
 
 class Spell:public Entity // класс специальной способности
 {

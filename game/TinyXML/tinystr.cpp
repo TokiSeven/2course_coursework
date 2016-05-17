@@ -80,31 +80,31 @@ TiXmlString& TiXmlString::append(const char* str, size_type len)
 
 TiXmlString operator + (const TiXmlString & a, const TiXmlString & b)
 {
-	TiXmlString tmp;
-	tmp.reserve(a.length() + b.length());
-	tmp += a;
-	tmp += b;
-	return tmp;
+    TiXmlString tmp;
+    tmp.reserve(a.length() + b.length());
+    tmp += a;
+    tmp += b;
+    return tmp;
 }
 
 TiXmlString operator + (const TiXmlString & a, const char* b)
 {
-	TiXmlString tmp;
-	TiXmlString::size_type b_len = static_cast<TiXmlString::size_type>( strlen(b) );
-	tmp.reserve(a.length() + b_len);
-	tmp += a;
-	tmp.append(b, b_len);
-	return tmp;
+    TiXmlString tmp;
+    TiXmlString::size_type b_len = static_cast<TiXmlString::size_type>( strlen(b) );
+    tmp.reserve(a.length() + b_len);
+    tmp += a;
+    tmp.append(b, b_len);
+    return tmp;
 }
 
 TiXmlString operator + (const char* a, const TiXmlString & b)
 {
-	TiXmlString tmp;
-	TiXmlString::size_type a_len = static_cast<TiXmlString::size_type>( strlen(a) );
-	tmp.reserve(a_len + b.length());
-	tmp.append(a, a_len);
-	tmp += b;
-	return tmp;
+    TiXmlString tmp;
+    TiXmlString::size_type a_len = static_cast<TiXmlString::size_type>( strlen(a) );
+    tmp.reserve(a_len + b.length());
+    tmp.append(a, a_len);
+    tmp += b;
+    return tmp;
 }
 
 

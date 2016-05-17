@@ -1,10 +1,10 @@
 #ifndef ANIMATION_H
 #define ANIMATION_H
 
-#include "./TinyXML/tinyxml.h"
-#include "./TinyXML/tinystr.h"
+#include "TinyXML/tinyxml.h"
+#include "TinyXML/tinystr.h"
 #include <SFML/Graphics.hpp>
-
+#include <QDebug>
 
 using namespace sf;
 

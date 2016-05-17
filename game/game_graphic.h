@@ -3,11 +3,20 @@
 
 #include <QObject>
 #include <QTimer>
-#include "container.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <list>
-#include "coursework/game.h"
+#include <QThread>
+#include "container.h"
+//from game.h
+#include <vector>
+#include <list>
+#include "level.h"
+#include "animation.h"
+#include "entity.h"
+#include "spell.h"
+#include "player.h"
+#include "healthbar.h"
 
 class Game_graphic : public QObject
 {
@@ -47,6 +56,22 @@ protected:
     int windowHeight;
     int windowWidth;
     QString windowName;
+
+    //from game.h
+    View *view;
+    Level lvl; // карта
+    Texture ichigo_t, bg; // текстуры
+    AnimationManager anim; // анимации персонажа
+    AnimationManager anim2; // анимации способности
+    Sprite background; // фон
+    std::list<Entity*>  entities; // массив объектов
+    std::list<Entity*>::iterator it;
+    PLAYER *Ichigo; // игрок
+    HealthBar healthBar; // полоска жизней
+    Music music;
+    bool o;
+    bool space; // проверка одного нажатия
+    Clock clock; // часы
 };
 
 #endif // GAME_GRAPHIC_H

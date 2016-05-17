@@ -6,8 +6,6 @@
 
 QT       += core gui network
 
-CONFIG += c++11
-
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = game
@@ -22,10 +20,10 @@ SOURCES += main.cpp\
     ../server/network_main.cpp \
     api.cpp \
     player_old.cpp \
-    coursework/TinyXML/tinystr.cpp \
-    coursework/TinyXML/tinyxml.cpp \
-    coursework/TinyXML/tinyxmlerror.cpp \
-    coursework/TinyXML/tinyxmlparser.cpp
+    TinyXML/tinystr.cpp \
+    TinyXML/tinyxml.cpp \
+    TinyXML/tinyxmlerror.cpp \
+    TinyXML/tinyxmlparser.cpp
 
 HEADERS  += \
     container.h \
@@ -41,21 +39,17 @@ HEADERS  += \
     level.h \
     player.h \
     spell.h \
-    coursework/TinyXML/tinystr.h \
-    coursework/TinyXML/tinyxml.h \
-    coursework/animation.h \
-    coursework/entity.h \
-    coursework/game.h \
-    coursework/healthbar.h \
-    coursework/level.h \
-    coursework/player.h \
-    coursework/spell.h
+    animation.h \
+    entity.h \
+    healthbar.h \
+    level.h \
+    player.h \
+    spell.h \
+    TinyXML/tinystr.h \
+    TinyXML/tinyxml.h
 
 FORMS    += \
     mainwindow_connect.ui
-
-DISTFILES += \
-    game.pro.user
 
 
 LIBS += -LD:/SFML/lib
@@ -68,4 +62,3 @@ DEPENDPATH += D:/SFML/include
 
 RESOURCES += \
     launcher_images.qrc \
-    coursework/res.qrc

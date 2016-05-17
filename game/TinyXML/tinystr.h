@@ -276,7 +276,6 @@ TiXmlString operator + (const TiXmlString & a, const TiXmlString & b);
 TiXmlString operator + (const TiXmlString & a, const char* b);
 TiXmlString operator + (const char* a, const TiXmlString & b);
 
-
 /*
    TiXmlOutStream is an emulation of std::ostream. It is based on TiXmlString.
    Only the operators that we need for TinyXML have been developped.

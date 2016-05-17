@@ -4,8 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <vector>
-#include "./animation.h"
-#include "./level.h"
+#include "animation.h"
+#include "level.h"
 
 
 using namespace sf;

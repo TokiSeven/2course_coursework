@@ -1,7 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "./entity.h"
+#include "entity.h"
 
 
 class PLAYER: public Entity // класс игрока
@@ -92,7 +92,7 @@ public:
             }
         }
 
-        /////////////////////если клавиша отпущена///////////////////////////
+        // ///////////////////если клавиша отпущена///////////////////////////
         if (!(key["R"] || key["L"]))
         {
             dx=0;
