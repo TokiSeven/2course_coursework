@@ -25,9 +25,9 @@ public:
         loop=true;
     }
 
-    void tick(float time) // сама функция анимации со входным параметром - временем
+    bool tick(float time) // сама функция анимации со входным параметром - временем
     {
-        if (!isPlaying) return; // выход если не проигрывается
+        if (!isPlaying) return isPlaying; // выход если не проигрывается
 
         currentFrame += speed * time; // смена кадров
 
@@ -37,7 +37,7 @@ public:
             if (!loop) // если анимация не зациклена
             {
                 isPlaying=false;
-                return;
+                return isPlaying;
             }
         }
 
@@ -45,9 +45,10 @@ public:
         sprite.setOrigin(0,frames[i].height); // смена точки отсчёта координат
         sprite.setTextureRect(frames[i]); // наложение кадров на текстуру
         if (flip) sprite.setTextureRect(frames_flip[i]); // зеркальное наложение
+        return isPlaying;
     }
-
 };
+
 
 
 
@@ -59,13 +60,16 @@ public:
     std::map<std::string, Animation> animList; // список анимаций
 
     AnimationManager()
-    {}
+    {
 
-    ~AnimationManager()
-    { animList.clear();
     }
 
-   //создание анимаций вручную
+    ~AnimationManager()
+    {
+        animList.clear();
+    }
+
+    //создание анимаций вручную
     void create(std::string name, Texture &texture, int x, int y, int w, int h, int count, float speed, int step=0, bool Loop=true)
     {
         Animation a;
@@ -141,9 +145,9 @@ public:
         animList[currentAnim].flip = b;
     }
 
-    void tick(float time)
+    bool tick(float time)
     {
-        animList[currentAnim].tick(time);
+        return animList[currentAnim].tick(time);
     }
 
     void pause()

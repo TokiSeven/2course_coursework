@@ -70,7 +70,7 @@ protected:
     HealthBar healthBar; // полоска жизней
     Music music;
     bool o;
-    bool space; // проверка одного нажатия
+    bool spell; // проверка одного нажатия
     Clock clock; // часы
 };
 

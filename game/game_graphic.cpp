@@ -33,11 +33,7 @@ void Game_graphic::initialization()
 
     anim.animList["jump"].loop = 0;
     anim.animList["cattack"].loop = 0;
-    anim.animList["vattack"].loop = 0;
-    anim.animList["cforwardattack"].loop = 0;
-    anim.animList["vforwardattack"].loop = 0;
     anim.animList["cjumpattack"].loop = 0;
-    anim.animList["vjumpattack"].loop = 0;
     anim.animList["spell"].loop = 0;
 
     anim2.loadFromXML("files/anim_getsuga.xml",ichigo_t);
@@ -46,14 +42,14 @@ void Game_graphic::initialization()
     background.setTexture(bg);
     background.setOrigin(bg.getSize().x/2,bg.getSize().y/2);
 
-    Ichigo = new PLAYER(anim, lvl, 300, 100,"Player",0.0,0.0,100,"stay");
+    Ichigo = new PLAYER(anim, lvl, 300, 100,"Player",0.0,0.0,100,"stay",0);
 
     music.openFromFile("files/bg.wav");
     music.play();
     music.setVolume(20);
 
     o = false;
-    space = false;
+    spell = false;
 }
 
 void Game_graphic::updatePlayersAll()
@@ -94,18 +90,7 @@ void Game_graphic::main_cycle()//started every cycle of game
     if (Keyboard::isKeyPressed(Keyboard::Right)) Ichigo->key["R"]=true;
     if (Keyboard::isKeyPressed(Keyboard::Up)) Ichigo->key["Up"]=true;
     if (Keyboard::isKeyPressed(Keyboard::Down)) Ichigo->key["Down"]=true;
-    if (Keyboard::isKeyPressed(Keyboard::Space))
-    {
-        Ichigo->key["Space"]=true;
-        if(Ichigo->anim.animList["spell"].currentFrame >= 6 && Ichigo->anim.animList["spell"].currentFrame < 6.1)
-            if(!space) // анимация способности на 6 кадре 1 раз за 1 нажатие на кнопку
-            {
-                space = true;
-                entities.push_back(new Spell(anim2,lvl,Ichigo->x+25,Ichigo->y-60,Ichigo->dir,"Spell", 0.3, 0.0, 10, "move")); // добавление способности в массив объектов
-            }
-    }
-    if (!Keyboard::isKeyPressed(Keyboard::Space))
-        space = false;
+    if (Keyboard::isKeyPressed(Keyboard::Space)) Ichigo->key["Space"]=true;
     if (Keyboard::isKeyPressed(Keyboard::C)) Ichigo->key["C"]=true;
     if (Keyboard::isKeyPressed(Keyboard::V)) Ichigo->key["V"]=true;
     if (Keyboard::isKeyPressed(Keyboard::B)) Ichigo->key["B"]=true;
@@ -113,9 +98,18 @@ void Game_graphic::main_cycle()//started every cycle of game
     if(Keyboard::isKeyPressed(Keyboard::O))
         if(!o)
         {
-            entities.push_back(new PLAYER(anim, lvl, 700, 500,"Player",0.0,0.0,100,"stay"));
+            entities.push_back(new PLAYER(anim, lvl, 700, 500,"Player",0.0,0.0,100,"stay",0));
             o=true;
         }
+
+    if(Ichigo->anim.animList["spell"].currentFrame >= 6 && Ichigo->anim.animList["spell"].currentFrame < 6.1 && !spell)
+    {
+        entities.push_back(new Spell(anim2,lvl,Ichigo->x+25,Ichigo->y-60,Ichigo->dir,"Spell", 0.3, 0.0, 10, "move")); // добавление способности в массив объектов
+        spell = true;
+    }
+    if(Ichigo->anim.animList["spell"].currentFrame > 6.1)
+        spell = false;
+
 
     for(it=entities.begin();it!=entities.end();) // есои объект мертв, то удаляем из массива
     {
@@ -145,25 +139,28 @@ void Game_graphic::main_cycle()//started every cycle of game
 
             if  (Ichigo->getRect().intersects(player->getRect())) // если объекты пересекаются
             { // и у персонажа проигрывается анимация атаки
-                if (Ichigo->anim.isPlaying() && Ichigo->anim.currentAnim != "stay" && Ichigo->anim.currentAnim != "jump" && Ichigo->anim.currentAnim != "spell" && Ichigo->anim.currentAnim != "walk" && Ichigo->anim.currentAnim != "hit")
-                { // то раним врага
-                    player->hit = true;
-                    player->Health-=5;
-                    if (player->dir)
-                        player->x+=10;
-                    else
-                        player->x-=10;
-                }
-                else if (!Ichigo->hit)
-                { // иначе раним игрока
-                    Ichigo->Health-=5;
-                    Ichigo->hit=true;
-                    if (Ichigo->dir)
-                        Ichigo->x+=10;
-                    else
-                        Ichigo->x-=10;
-                }
+                if (Ichigo->anim.currentAnim == "cattack" || Ichigo->anim.currentAnim == "cjumpattack")
+                    if((Ichigo->x < player->x && Ichigo->dir == 0) ||(Ichigo->x >= player->x && Ichigo->dir == 1))
+                    { // то раним врага
+                        player->hit = true;
+                        player->Health-=5;
+                        if (Ichigo->dir)
+                            player->x-=50;
+                        else
+                            player->x+=50;
+                    }
+                if (player->anim.currentAnim == "cattack" || player->anim.currentAnim == "0cjumpattack")
+                    if((player->x < Ichigo->x && player->dir == 0) ||(player->x >= Ichigo->x && player->dir == 1))
+                    { // иначе раним игрока
+                        Ichigo->Health-=5;
+                        Ichigo->hit=true;
+                        if (player->dir)
+                            Ichigo->x+=50;
+                        else
+                            Ichigo->x-=50;
+                    }
             }
+
 
             // способности
             for (std::list<Entity*>::iterator it2=entities.begin(); it2!=entities.end(); it2++)
@@ -175,7 +172,13 @@ void Game_graphic::main_cycle()//started every cycle of game
                         if(spell->getRect().intersects(player->getRect())) // если способность взаимодействует с врагом
                         { // то пропадает и отнимает жизни
                             spell->Health=0;
-                            player->Health-=5;
+                            player->Health-=20;
+                            player->hit = true;
+                            std::cout << spell->dir;
+                            if (spell->dir)
+                                player->x-=50;
+                            else
+                                player->x+=50;
                         }
                         for (std::list<Entity*>::iterator it3=entities.begin(); it3!=entities.end(); it3++)
                         {
@@ -193,6 +196,7 @@ void Game_graphic::main_cycle()//started every cycle of game
             }
         }
     }
+
 
 
     // ///////////////////отображаем на экран/////////////////////

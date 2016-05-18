@@ -21,12 +21,12 @@ public:
     std::string name; // имя объекта
     int Health; // здоровье
 
-    Entity(AnimationManager &A,int X, int Y,std::string NAME, float DX, float DY, int HEALTH, std::string FIRST_ANIM)
+    Entity(AnimationManager &A,int X, int Y,std::string NAME, float DX, float DY, int HEALTH, std::string FIRST_ANIM,bool DIR)
     {
         anim = A;
         x = X;
         y = Y;
-        dir = 0;
+        dir = DIR;
         name = NAME;
         anim.set(FIRST_ANIM);
         w = anim.animList[anim.currentAnim].frames[0].width;

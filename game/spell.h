@@ -3,6 +3,7 @@
 
 #include "entity.h"
 
+
 class Spell:public Entity // класс специальной способности
 {
 public:
@@ -10,7 +11,7 @@ public:
     SoundBuffer SPbuf, EXbuf;
     Sound SP, EX;
 
-    Spell(AnimationManager &a, Level &lev, int x, int y, bool dir, std::string name, float DX, float dy, int health, std::string first_anim):Entity(a,x,y,name,DX,dy,health,first_anim)
+    Spell(AnimationManager &a, Level &lev, int x, int y, bool DIR, std::string name, float DX, float dy, int health, std::string first_anim):Entity(a,x,y,name,DX,dy,health,first_anim,DIR)
     {
         if (dir)
         {
@@ -36,10 +37,12 @@ public:
         if (Health<=0) // если теряет все жизни
         {
             anim.set("explode"); // то взрывается
-            EX.play();
             dx=0;
             if (anim.isPlaying()==false) // по окончании анимации
+            {
+                EX.play();
                 life=false; // удаляется из массива объектов
+            }
         }
         anim.tick(time); // функция анимации
     }
