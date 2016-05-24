@@ -46,7 +46,8 @@ HEADERS  += \
     player.h \
     spell.h \
     TinyXML/tinystr.h \
-    TinyXML/tinyxml.h
+    TinyXML/tinyxml.h \
+    data.h
 
 FORMS    += \
     mainwindow_connect.ui

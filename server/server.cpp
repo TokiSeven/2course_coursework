@@ -30,7 +30,7 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
     in >> pl_name;
     in >> cmd_qs;
 
-    COMMAND cmd = Player_old::_CMD(cmd_qs);
+    COMMAND cmd = Data::_CMD(cmd_qs);
 
     qDebug() << QString("server >> NICK: ") + pl_name + QString("::") + cmd_qs;
 
@@ -40,19 +40,29 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
         for (int i = 0; i < players.size(); i++)
             if (players[i].getName() == pl_name)
                 been = true;
+
         if (been)
             sendAuth(ip, false);
         else
         {
             sendAuth(ip, true);
 
-            Player_old plr(ip, pl_name);
+            Data plr;
+            qDebug() << "HERE 1";
+            plr.setIp(ip);
+            qDebug() << "HERE 2";
+            plr.name = pl_name.toStdString();
+            qDebug() << "HERE 3";
             int num = players.size();
+            qDebug() << "HERE 4";
 
             players.append(plr);
+            qDebug() << "HERE 5";
             players[num].setIp(ip);
+            qDebug() << "HERE 6";
 
             sendPlayer(players[num]);
+            qDebug() << "HERE";
             emit signal_newPlayer(players[num].getName());
         }
         return;
@@ -72,9 +82,9 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
     //=================================================================
     if (cmd == _update)
     {
-        Player_old pl;
+        Data pl;
         in >> pl;
-        players[j](pl);
+        players[j] = pl;
         players[j].setIp(ip);
         sendPlayer(players[j]);
     }
@@ -107,13 +117,13 @@ bool Server::checkAuth(const QString login)
 //============================================
 //                          <<__SENDING PLAYER
 //============================================
-void Server::sendPlayer(Player_old pl)
+void Server::sendPlayer(Data pl)
 {
     QByteArray data;
     QDataStream out(&data, QIODevice::WriteOnly);
 
     out << pl.getName();
-    out << Player_old::_CMD(_update);
+    out << Data::_CMD(_update);
     out << pl;
 
     for (int i = 0; i < players.size(); i++)
@@ -133,7 +143,7 @@ void Server::checkWhoIsHere()
         int size = players.size();
         for (int i = 0; i < players.size();)
         {
-            if (!players[i].getOnline())
+            if (!players[i].online)
             {
                 QString temp = players[i].getName();
                 players.removeAt(i);
@@ -163,7 +173,7 @@ void Server::sendAuth(QHostAddress addr, bool flag)
     QString str = (flag) ? QString::fromStdString("YES") : QString::fromStdString("NO");
 
     out << QString::fromStdString("SERVER");
-    out << Player_old::_CMD(_login);
+    out << Data::_CMD(_login);
     out << str;
 
     this->sendMessage(data, addr);
@@ -178,7 +188,7 @@ void Server::sendPlayersToAll()
     QDataStream out(&data, QIODevice::WriteOnly);
 
     out << QString::fromStdString("SERVER");
-    out << Player_old::_CMD(_players);
+    out << Data::_CMD(_players);
     out << this->players;
 
     for (int i = 0; i < players.size(); i++)

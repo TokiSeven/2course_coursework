@@ -11,6 +11,7 @@
 //from game.h
 #include <vector>
 #include <list>
+
 #include "level.h"
 #include "animation.h"
 #include "entity.h"
@@ -33,12 +34,14 @@ signals:
     void signal_game_closed();
 
 public slots:
-    void slot_position(Player_old);
+    void slot_position(Data);
     void slot_update();
     void slot_game_start();
     void slot_close();
 
 protected:
+    void clearEnemies();
+
     //sfml
     void initialization();
     void updatePlayersAll();

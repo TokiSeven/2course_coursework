@@ -2,7 +2,7 @@
 #define SERVER_H
 
 #include <QTimer>
-#include "../game/player_old.h"
+#include "../game/data.h"
 #include "network_main.h"
 
 class Server : public network_main
@@ -13,7 +13,7 @@ public:
     ~Server();
 
     //inline selectors
-    inline const QList<Player_old> getPlayers()const{return this->players;}//return all players
+    inline const QList<Data> getPlayers()const{return this->players;}//return all players
 
 signals:
     void signal_newPlayer(QString name);
@@ -27,7 +27,7 @@ protected:
 
 private:
     //need for resend to players
-    void sendPlayer(Player_old);//do it, if player doing something
+    void sendPlayer(Data);//do it, if player doing something
     void sendPlayerWhoIsHere();//check all who offline
     void sendAuth(QHostAddress, bool);//send to ip that he auth
     void sendPlayersToAll();//send all players to all
@@ -35,7 +35,7 @@ private:
     bool checkAuth(const QString);//check authorization
     int searchPlayer(QHostAddress, QString);//search player by ip and name and return his number in list
 
-    QList<Player_old> players;//all players
+    QList<Data> players;//all players
 
     QTimer timer_to_ask;//timer for sending to players message "who are here?"
 };

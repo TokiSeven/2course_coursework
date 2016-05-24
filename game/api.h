@@ -13,6 +13,7 @@ class API : public QObject
     Q_OBJECT
 public:
     explicit API(QObject *parent = 0);
+    ~API();
 
     void startGame();//start game, if setPlName & connect to server was been
 
@@ -40,6 +41,8 @@ protected:
     Game_graphic *game_graph;
     Container *cont;
     MainWindow_connect *mw;
+    //bools for game
+    bool isGameNet, isGameGraph, isContainer, isMainWindow;
 };
 
 #endif // API_H

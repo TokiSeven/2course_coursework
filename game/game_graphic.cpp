@@ -1,5 +1,5 @@
 #include "game_graphic.h"
-#include <QDebug>
+
 Game_graphic::Game_graphic(Container *cont, QObject *parent)//constructor, set size of window and it's name
     : QObject(parent)
 {
@@ -42,8 +42,7 @@ void Game_graphic::initialization()
     background.setTexture(bg);
     background.setOrigin(bg.getSize().x/2,bg.getSize().y/2);
 
-    Ichigo = new PLAYER(anim, lvl, 300, 100,"Player",0.0,0.0,100,"stay",0);
-
+    Ichigo = new PLAYER(anim, lvl, 300, 100,"Player",0.0,0.0,100,"stay",0,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].width,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].height);
     music.openFromFile("files/bg.wav");
     music.play();
     music.setVolume(20);
@@ -54,26 +53,7 @@ void Game_graphic::initialization()
 
 void Game_graphic::updatePlayersAll()
 {
-    pl_all.clear();
-
-    int size = cont->getPlayer_all().size();
-    float width = cont->getPlayer_current().getWidth();
-    float height = cont->getPlayer_current().getHeight();
-
-    //for current player
-    sf::RectangleShape rect;
-    rect.setSize(sf::Vector2f(width, height));
-    rect.setFillColor(sf::Color(100, 100, 100));
-    rect.setPosition(cont->getPlayer_current().getX(), cont->getPlayer_current().getY());
-    pl_current = rect;
-    //connect(cont->getPlayer_current(), SIGNAL(changed_position(Player*)), this, SLOT(slot_position(Player*)));
-
-    //for all players
-    for(int i = 0; i < size; i++)
-    {
-        rect.setPosition(cont->getPlayer_all()[i].getX(), cont->getPlayer_all()[i].getY());
-        pl_all.append(rect);
-    }
+    slot_update();
 }
 
 void Game_graphic::main_cycle()//started every cycle of game
@@ -98,13 +78,13 @@ void Game_graphic::main_cycle()//started every cycle of game
     if(Keyboard::isKeyPressed(Keyboard::O))
         if(!o)
         {
-            entities.push_back(new PLAYER(anim, lvl, 700, 500,"Player",0.0,0.0,100,"stay",0));
+            entities.push_back(new PLAYER(anim, lvl, 700, 500,"Player",0.0,0.0,100,"stay",0,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].width,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].height));
             o=true;
         }
 
     if(Ichigo->anim.animList["spell"].currentFrame >= 6 && Ichigo->anim.animList["spell"].currentFrame < 6.1 && !spell)
     {
-        entities.push_back(new Spell(anim2,lvl,Ichigo->x+25,Ichigo->y-60,Ichigo->dir,"Spell", 0.3, 0.0, 10, "move")); // добавление способности в массив объектов
+        entities.push_back(new Spell(anim2,lvl,Ichigo->x+25,Ichigo->y-60,Ichigo->dir,"Spell", 0.3, 0.0, 10, "move",anim2.animList[anim2.currentAnim].frames[anim2.animList[anim2.currentAnim].currentFrame].width,anim2.animList[anim2.currentAnim].frames[anim2.animList[anim2.currentAnim].currentFrame].height)); // добавление способности в массив объектов
         spell = true;
     }
     if(Ichigo->anim.animList["spell"].currentFrame > 6.1)
@@ -130,14 +110,15 @@ void Game_graphic::main_cycle()//started every cycle of game
     for(it=entities.begin();it!=entities.end();it++) // взаимодействие объектов
     {
         // враги
-        if ((*it)->name=="Player")
+        if ((*it)->getType()=="Player")
         {
             Entity *pl = *it;
             PLAYER *player = (PLAYER*)pl;
 
             if (player->Health<=0) continue;
 
-            if  (Ichigo->getRect().intersects(player->getRect())) // если объекты пересекаются
+            // если объекты пересекаются
+            if  (Ichigo->getRect().intersects(player->getRect()))
             { // и у персонажа проигрывается анимация атаки
                 if (Ichigo->anim.currentAnim == "cattack" || Ichigo->anim.currentAnim == "cjumpattack")
                     if((Ichigo->x < player->x && Ichigo->dir == 0) ||(Ichigo->x >= player->x && Ichigo->dir == 1))
@@ -166,7 +147,7 @@ void Game_graphic::main_cycle()//started every cycle of game
             for (std::list<Entity*>::iterator it2=entities.begin(); it2!=entities.end(); it2++)
             {
                 Entity *spell = *it2;
-                if (spell->name=="Spell")
+                if (spell->getType()=="Spell")
                     if (spell->Health>0)
                     {
                         if(spell->getRect().intersects(player->getRect())) // если способность взаимодействует с врагом
@@ -183,7 +164,7 @@ void Game_graphic::main_cycle()//started every cycle of game
                         for (std::list<Entity*>::iterator it3=entities.begin(); it3!=entities.end(); it3++)
                         {
                             Entity *spell2 = *it3;
-                            if(spell2->name=="Spell")
+                            if(spell2->getType()=="Spell")
                                 if(spell2->Health>0)
                                     if(spell->getRect() != spell2->getRect()) // если способность взаимодействует со способностью
                                         if(spell->getRect().intersects(spell2->getRect()))
@@ -272,18 +253,36 @@ void Game_graphic::game_start()//main function of game
 //================================================================================================
 //==========================================SLOTS(BEGIN)==========================================
 //================================================================================================
-void Game_graphic::slot_position(Player_old player)
+void Game_graphic::slot_position(Data player)
 {
-    int num = cont->getPlayer_all().indexOf(player);
-    if (num == -1)//if didn't been finded in all players (it will be yourself)
-        this->pl_current.setPosition(cont->getPlayer_current().getX(), cont->getPlayer_current().getY());
-    else if (num < cont->getPlayer_all().size())
-        this->pl_all[num].setPosition(cont->getPlayer_all()[num].getX(), cont->getPlayer_all()[num].getY());
+//    int num = cont->getPlayer_all().indexOf(player);
+//    if (num == -1)//if didn't been finded in all players (it will be yourself)
+//        this->pl_current.setPosition(cont->getPlayer_current().getX(), cont->getPlayer_current().getY());
+//    else if (num < cont->getPlayer_all().size())
+//        this->pl_all[num].setPosition(cont->getPlayer_all()[num].getX(), cont->getPlayer_all()[num].getY());
 }
 
 void Game_graphic::slot_update()
 {
-    initialization();
+    clearEnemies();
+    for (int i = 0; i < cont->getPlayer_all().size(); i++)
+    {
+        Data temp;
+        temp = cont->getPlayer_all()[i];
+        entities.push_back(new PLAYER(anim,
+                                      lvl,
+                                      temp.x,
+                                      temp.y,
+                                      temp.name,
+                                      temp.dx,
+                                      temp.dy,
+                                      temp.Health,
+                                      "Stay",
+                                      temp.dir,
+                                      temp.w,
+                                      temp.h));
+
+    }
 }
 
 void Game_graphic::slot_game_start()
@@ -295,6 +294,21 @@ void Game_graphic::slot_close()
 {
     emit signal_game_closed();
     this->window->close();
+}
+
+void Game_graphic::clearEnemies()
+{
+    for(it=entities.begin();it!=entities.end();)
+    {
+        Entity *b = *it;
+        if (b->getType() == "Player")
+        {
+            it  = entities.erase(it);
+            delete b;
+        }
+        else
+            it++;
+    }
 }
 
 //================================================================================================

@@ -3,7 +3,6 @@
 
 #include "entity.h"
 
-
 class PLAYER: public Entity // класс игрока
 {
 public:
@@ -13,8 +12,10 @@ public:
     SoundBuffer Abuf, HITbuf, Jbuf;
     Sound A, HIT, J;
 
-    PLAYER(AnimationManager &a, Level &lev,int x,int y, std::string name, float dx, float dy, int health, std::string first_anim, bool DIR):Entity(a,x,y,name,dx,dy,health,first_anim,DIR)
+    PLAYER(AnimationManager &a, Level &lev,int x,int y, std::string name, float dx, float dy, int health, std::string first_anim, bool DIR, float W, float H)
+        : Entity(a,x,y,name,dx,dy,health,first_anim,DIR,W,H)
     {
+        this->type = "Player";
         STATE=stay;
         hit=false, spell=false, cattack=false, spellPush=false, cattackPush=false, jumpPush=false;
         obj = lev.GetAllObjects(); // массив объектов
@@ -81,7 +82,7 @@ public:
                 }
             }
 
-            /////////////////////если клавиша отпущена///////////////////////////
+            // ///////////////////если клавиша отпущена///////////////////////////
             if (!(key["R"] || key["L"]))
             {
                 dx=0;

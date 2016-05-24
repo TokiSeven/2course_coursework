@@ -15,6 +15,9 @@ public:
     explicit MainWindow_connect(QWidget *parent = 0);
     ~MainWindow_connect();
 
+public slots:
+    void game_closed();
+
 signals:
     void signal_closed();
     void signal_button_connect(QString nick, QString server);

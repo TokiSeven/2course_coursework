@@ -6,12 +6,9 @@
 #include <map>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+
 #include "TinyXML/tinyxml.h"
 #include "TinyXML/tinystr.h"
-//#include "TinyXML/tinystr.cpp"
-//#include "TinyXML/tinyxml.cpp"
-//#include "TinyXML/tinyxmlerror.cpp"
-//#include "TinyXML/tinyxmlparser.cpp"
 
 struct Object
 {

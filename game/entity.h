@@ -6,38 +6,27 @@
 #include <vector>
 #include "animation.h"
 #include "level.h"
+#include "data.h"
 
 
 using namespace sf;
 
-class Entity // класс объектов
+class Entity: public Data// класс объектов
 {
 public:
-    float x,y,dx,dy,w,h; // координаты, скорость, ширина, высота
     AnimationManager anim; // набор анимаций
     std::vector<Object> obj; // массив объектов
-    bool life, dir; // существование объекта, направление
-    float timer; // таймер
-    std::string name; // имя объекта
-    int Health; // здоровье
+    QString type;
 
-    Entity(AnimationManager &A,int X, int Y,std::string NAME, float DX, float DY, int HEALTH, std::string FIRST_ANIM,bool DIR)
+    Entity(AnimationManager &A,int X, int Y,std::string NAME, float DX, float DY, int HEALTH, std::string FIRST_ANIM,bool DIR, float W, float H)
+        : Data(X, Y, NAME, DX, DY, HEALTH, DIR, W, H)
     {
+        this->type = "Entity";
         anim = A;
-        x = X;
-        y = Y;
-        dir = DIR;
-        name = NAME;
         anim.set(FIRST_ANIM);
-        w = anim.animList[anim.currentAnim].frames[0].width;
-        h = anim.animList[anim.currentAnim].frames[0].height;
-        dx = DX;
-        dy = DY;
-        Health = HEALTH;
-        life=true;
-        timer=0;
     }
 
+    virtual QString getType()const{return this->type;}
     virtual void update(float time) = 0; // функция обновления
 
     void draw(RenderWindow &window) // функция отрисовки

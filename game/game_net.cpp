@@ -3,7 +3,7 @@
 Game_net::Game_net(Container *cont, QObject *parent)
     : network_main(cont->getServerPort(), cont->getPlayerPort(), parent)
 {
-    qDebug() << QString("Game_net-->> ") + "Created.";
+    ////qDebug() << QString("Game_net-->> ") + "Created.";
     this->cont = cont;
 
     this->socketListen();
@@ -21,7 +21,7 @@ Game_net::Game_net(Container *cont, QObject *parent)
 
 Game_net::~Game_net()
 {
-    qDebug() << QString("Game_net-->> ") + "~Game_net()";
+    ////qDebug() << QString("Game_net-->> ") + "~Game_net()";
     //this->cont->slot_game_close();
     //emit signal_closed();
     //    if (this)
@@ -37,7 +37,7 @@ void Game_net::sendPlayer()
     QDataStream out(&data, QIODevice::WriteOnly);
 
     out << cont->getPlayer_current().getName();
-    out << Player_old::_CMD(_update);
+    out << Data::_CMD(_update);
     out << cont->getPlayer_current();
 
     this->sendMessage(data, cont->getServerIp());
@@ -51,20 +51,20 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
     QString pl_name, cmd_qs;
     in >> pl_name;
     in >> cmd_qs;
-    COMMAND cmd = Player_old::_CMD(cmd_qs);
+    COMMAND cmd = Data::_CMD(cmd_qs);
 
-    qDebug() << pl_name + "::" + Player_old::_CMD(cmd);
+    //qDebug() << pl_name + "::" + Data::_CMD(cmd);
 
     if (cmd == _update)
     {
-        Player_old pl;
+        Data pl;
         in >> pl;
         cont->updatePlayer(pl);
     }
     else if (cmd == _players)
     {
         timer_server_answer.start();
-        QList<Player_old> players;
+        QList<Data> players;
         in >> players;
         cont->updatePlayers(players);
     }
@@ -90,7 +90,7 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
 
 void Game_net::slot_game_close()
 {
-    qDebug() << QString("Game_net-->> ") + "slot_game_close()";
+    ////qDebug() << QString("Game_net-->> ") + "slot_game_close()";
     //emit signal_closed();
 }
 
@@ -106,13 +106,13 @@ void Game_net::slot_connect(QString nick, QString server)
 
 void Game_net::connectToServer(const QString serv_ip, QString pl_name)
 {
-    this->cont->getPlayer_current_pointer()->setName(pl_name);
+    this->cont->getPlayer_current_pointer()->name = pl_name.toStdString();
 
     QByteArray data;
     QDataStream out(&data, QIODevice::WriteOnly);
 
     out << pl_name;
-    out << Player_old::_CMD(_login);
+    out << Data::_CMD(_login);
 
     this->sendMessage(data, QHostAddress(serv_ip));
 
@@ -121,7 +121,7 @@ void Game_net::connectToServer(const QString serv_ip, QString pl_name)
 
 void Game_net::timeOut()
 {
-    qDebug() << QString("Game_net-->> ") + "timeOut()";
+    ////qDebug() << QString("Game_net-->> ") + "timeOut()";
     timer_answer.stop();
     emit disconnected();
 }

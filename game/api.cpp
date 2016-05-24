@@ -10,16 +10,22 @@ API::API(QObject *parent) : QObject(parent)
     this->connect_all();
 }
 
+API::~API()
+{
+    delete this->cont;
+    delete this->game_graph;
+    delete this->game_net;
+    delete this->mw;
+}
+
 void API::startGame()
 {
-    //game_graph->game_start();
     //Create a thread for graphic part
 
     QThread *thread = new QThread;
     game_graph->moveToThread(thread);
     connect(thread, SIGNAL(started()), game_graph, SLOT(slot_game_start()));
     connect(game_graph, SIGNAL(signal_game_closed()), thread, SLOT(quit()));
-    connect(game_graph, SIGNAL(signal_game_closed()), game_graph, SLOT(deleteLater()));
     connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     thread->start();
 }
@@ -31,8 +37,8 @@ void API::slot_startGame()
 
 void API::slot_gameClose()
 {
-    this->mw->close();
-    this->deleteLater();
+    //this->mw->close();
+    //this->deleteLater();
 }
 
 void API::connect_Game_net()
@@ -54,6 +60,8 @@ void API::connect_Game_graphic()
     Game_graphic *game = this->getGameGraphics();
 
     connect(game, SIGNAL(signal_game_closed()), this, SLOT(slot_gameClose()));
+    connect(game, SIGNAL(signal_game_closed()), this->getMainWindow(), SLOT(game_closed()));
+    connect(game, SIGNAL(signal_game_closed()), this->getGameNetwork(), SLOT(slot_game_close()));
 }
 
 void API::connect_Container()
@@ -78,7 +86,7 @@ void API::connect_MainWindow_connect()
 
 void API::connect_Player_Current()
 {
-    Player_old *player = this->getGameContainer()->getPlayer_current_pointer();
+    Data *player = this->getGameContainer()->getPlayer_current_pointer();
 }
 
 void API::connect_all()

@@ -11,8 +11,9 @@ public:
     SoundBuffer SPbuf, EXbuf;
     Sound SP, EX;
 
-    Spell(AnimationManager &a, Level &lev, int x, int y, bool DIR, std::string name, float DX, float dy, int health, std::string first_anim):Entity(a,x,y,name,DX,dy,health,first_anim,DIR)
+    Spell(AnimationManager &a, Level &lev, int x, int y, bool DIR, std::string name, float DX, float dy, int health, std::string first_anim, float W, float H):Entity(a,x,y,name,DX,dy,health,first_anim,DIR,W,H)
     {
+        this->type = "Spell";
         if (dir)
         {
             dx=-DX;
