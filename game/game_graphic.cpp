@@ -42,13 +42,16 @@ void Game_graphic::initialization()
     background.setTexture(bg);
     background.setOrigin(bg.getSize().x/2,bg.getSize().y/2);
 
-    Ichigo = new PLAYER(anim, lvl, 300, 100,"Player",0.0,0.0,100,"stay",0,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].width,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].height);
+    Ichigo = new PLAYER(anim, lvl, 300, 100,cont->getPlayer_current().name,0.0,0.0,100,"stay",0,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].width,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].height);
+    cont->updatePlayer(Ichigo->toData());
+
     music.openFromFile("files/bg.wav");
     music.play();
     music.setVolume(20);
 
     o = false;
     spell = false;
+
 }
 
 void Game_graphic::updatePlayersAll()
@@ -302,7 +305,7 @@ void Game_graphic::clearEnemies()
     for(it=entities.begin();it!=entities.end();)
     {
         Entity *b = *it;
-        if (b->getType() == "Player")
+        if (b->getType() == "Player" && b->getName() != cont->getPlayer_current().getName())
         {
             it  = entities.erase(it);
             delete b;

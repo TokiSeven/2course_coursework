@@ -3,7 +3,7 @@
 Game_net::Game_net(Container *cont, QObject *parent)
     : network_main(cont->getServerPort(), cont->getPlayerPort(), parent)
 {
-    ////qDebug() << QString("Game_net-->> ") + "Created.";
+    //-//qDebug() << QString("Game_net-->> ") + "Created.";
     this->cont = cont;
 
     this->socketListen();
@@ -21,7 +21,7 @@ Game_net::Game_net(Container *cont, QObject *parent)
 
 Game_net::~Game_net()
 {
-    ////qDebug() << QString("Game_net-->> ") + "~Game_net()";
+    //-//qDebug() << QString("Game_net-->> ") + "~Game_net()";
     //this->cont->slot_game_close();
     //emit signal_closed();
     //    if (this)
@@ -90,7 +90,7 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
 
 void Game_net::slot_game_close()
 {
-    ////qDebug() << QString("Game_net-->> ") + "slot_game_close()";
+    //-//qDebug() << QString("Game_net-->> ") + "slot_game_close()";
     //emit signal_closed();
 }
 
@@ -121,7 +121,7 @@ void Game_net::connectToServer(const QString serv_ip, QString pl_name)
 
 void Game_net::timeOut()
 {
-    ////qDebug() << QString("Game_net-->> ") + "timeOut()";
+    //-//qDebug() << QString("Game_net-->> ") + "timeOut()";
     timer_answer.stop();
     emit disconnected();
 }

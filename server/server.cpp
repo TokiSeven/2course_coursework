@@ -48,21 +48,14 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
             sendAuth(ip, true);
 
             Data plr;
-            qDebug() << "HERE 1";
             plr.setIp(ip);
-            qDebug() << "HERE 2";
             plr.name = pl_name.toStdString();
-            qDebug() << "HERE 3";
             int num = players.size();
-            qDebug() << "HERE 4";
 
             players.append(plr);
-            qDebug() << "HERE 5";
             players[num].setIp(ip);
-            qDebug() << "HERE 6";
 
             sendPlayer(players[num]);
-            qDebug() << "HERE";
             emit signal_newPlayer(players[num].getName());
         }
         return;

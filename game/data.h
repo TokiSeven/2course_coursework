@@ -25,9 +25,7 @@ public:
 
     Data toData()
     {
-        Data r;
-        r = (*((Data*)this));
-        return r;
+        return (*this);
     }
 
     Data()
@@ -106,10 +104,9 @@ public:
         this->Health = d.Health;
         this->life = d.life;
         this->name = d.name;
-        this->online = d.online;
         this->x = d.x;
         this->y = d.y;
-        this->timer = d.timer;
+        return (*this);
     }
 
     friend QDataStream &operator <<(QDataStream &out, const Data pl)
