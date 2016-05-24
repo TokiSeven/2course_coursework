@@ -4,7 +4,8 @@
 #include "entity.h"
 
 
-class Spell:public Entity // класс специальной способности
+class Spell
+        : public Entity // класс специальной способности
 {
 public:
 

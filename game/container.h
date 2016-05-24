@@ -6,7 +6,8 @@
 #include <QHostAddress>
 #include "data.h"
 
-class Container : public QObject
+class Container
+        : public QObject
 {
     Q_OBJECT
 public:

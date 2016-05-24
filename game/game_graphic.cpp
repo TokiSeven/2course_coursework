@@ -265,7 +265,8 @@ void Game_graphic::slot_position(Data player)
 void Game_graphic::slot_update()
 {
     clearEnemies();
-    for (int i = 0; i < cont->getPlayer_all().size(); i++)
+    int size = cont->getPlayer_all().size();
+    for (int i = 0; i < size; i++)
     {
         Data temp;
         temp = cont->getPlayer_all()[i];
@@ -280,8 +281,8 @@ void Game_graphic::slot_update()
                                       "Stay",
                                       temp.dir,
                                       temp.w,
-                                      temp.h));
-
+                                      temp.h)
+                           );
     }
 }
 

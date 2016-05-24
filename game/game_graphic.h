@@ -19,7 +19,8 @@
 #include "player.h"
 #include "healthbar.h"
 
-class Game_graphic : public QObject
+class Game_graphic
+        : public QObject
 {
     Q_OBJECT
 

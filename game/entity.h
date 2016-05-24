@@ -11,7 +11,8 @@
 
 using namespace sf;
 
-class Entity: public Data// класс объектов
+class Entity
+        : public Data// класс объектов
 {
 public:
     AnimationManager anim; // набор анимаций
@@ -26,7 +27,7 @@ public:
         anim.set(FIRST_ANIM);
     }
 
-    virtual QString getType()const{return this->type;}
+    QString getType()const{return this->type;}
     virtual void update(float time) = 0; // функция обновления
 
     void draw(RenderWindow &window) // функция отрисовки

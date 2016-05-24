@@ -8,14 +8,16 @@
 #include "mainwindow_connect.h"
 #include <QThread>
 
-class API : public QObject
+class API
+        : public QObject
 {
     Q_OBJECT
 public:
     explicit API(QObject *parent = 0);
     ~API();
 
-    void startGame();//start game, if setPlName & connect to server was been
+    //start game, if setPlName & connection to server was made successfully
+    void startGame();
 
     inline Game_net* getGameNetwork()const{return this->game_net;}
     inline Game_graphic* getGameGraphics()const{return this->game_graph;}

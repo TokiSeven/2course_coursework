@@ -46,19 +46,22 @@ void Container::updatePlayer(Data pl)
     if (num != -1)
     {
         players[num] = pl;
-        emit signal_update_current();
+        //emit signal_update_current();
+        emit signal_update_all();
     }
     else
     {
         if (this->pl.getName() == pl.getName())
         {
             this->pl = pl;
-            emit signal_update_all();
+            //emit signal_update_all();
+            emit signal_update_current();
         }
         else
         {
             this->players.append(pl);
-            emit signal_update_current();
+            //emit signal_update_current();
+            emit signal_update_all();
         }
     }
 }

@@ -3,7 +3,8 @@
 
 #include "entity.h"
 
-class PLAYER: public Entity // класс игрока
+class PLAYER
+        : public Entity // класс игрока
 {
 public:
     enum {stay,walk,jump} STATE; // состояния игрока

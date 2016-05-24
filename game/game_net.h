@@ -5,7 +5,8 @@
 #include <QTimer>
 #include "../server/network_main.h"
 
-class Game_net : public network_main
+class Game_net
+        : public network_main
 {
     Q_OBJECT
 public:
