@@ -24,18 +24,18 @@ bool network_main::socketListen()
         this->status = this->soc->bind(this->portToRead);
         if (this->status)
         {
-            qDebug() << QString("______________________________________________________________________________");
-            qDebug() << QString(" SOCKET-->> Socket was been binded on port (read) ") + QString::number(this->getPortToRead());
-            qDebug() << QString("       -->> Socket was been binded on port (send) ") + QString::number(this->getPortToSend());
-            qDebug() << QString("______________________________________________________________________________");
+//            qDebug() << QString("______________________________________________________________________________");
+//            qDebug() << QString(" SOCKET-->> Socket was been binded on port (read) ") + QString::number(this->getPortToRead());
+//            qDebug() << QString("       -->> Socket was been binded on port (send) ") + QString::number(this->getPortToSend());
+//            qDebug() << QString("______________________________________________________________________________");
             connect(this->soc, SIGNAL(readyRead()), this, SLOT(readDataGram()));
             fl = true;
         }
         else
         {
-            qDebug() << QString("______________________________________________________________________________");
-            qDebug() << " SOCKET-->> Socket was NOT been binded";
-            qDebug() << QString("______________________________________________________________________________");
+//            qDebug() << QString("______________________________________________________________________________");
+//            qDebug() << " SOCKET-->> Socket was NOT been binded";
+//            qDebug() << QString("______________________________________________________________________________");
             delete this->soc;
             fl = false;
         }
@@ -68,7 +68,7 @@ void network_main::sendMessage(QByteArray &DATA, QHostAddress IP)
 {
     if (this->getStatus())
     {
-        qDebug() << QString(" SOCKET-->> Send message on ") + IP.toString() + QString(":") + QString::number(this->portToSend);
+        //qDebug() << QString(" SOCKET-->> Send message on ") + IP.toString() + QString(":") + QString::number(this->portToSend);
 
         //send on IP:portToSend data
         this->soc->writeDatagram(DATA, IP, this->portToSend);

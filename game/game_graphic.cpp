@@ -43,7 +43,6 @@ void Game_graphic::initialization()
     background.setOrigin(bg.getSize().x/2,bg.getSize().y/2);
 
     Ichigo = new PLAYER(anim, lvl, 300, 100,cont->getPlayer_current().name,0.0,0.0,100,"stay",0,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].width,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].height);
-    cont->updatePlayer(Ichigo->toData());
 
     music.openFromFile("files/bg.wav");
     music.play();
@@ -57,6 +56,7 @@ void Game_graphic::initialization()
 void Game_graphic::updatePlayersAll()
 {
     slot_update();
+    cont->updatePlayer(Ichigo->toData());
 }
 
 void Game_graphic::main_cycle()//started every cycle of game
@@ -113,7 +113,7 @@ void Game_graphic::main_cycle()//started every cycle of game
     for(it=entities.begin();it!=entities.end();it++) // взаимодействие объектов
     {
         // враги
-        if ((*it)->getType()=="Player")
+        if ((*it)->getType()==QString("Player"))
         {
             Entity *pl = *it;
             PLAYER *player = (PLAYER*)pl;
@@ -258,34 +258,46 @@ void Game_graphic::game_start()//main function of game
 //================================================================================================
 void Game_graphic::slot_position(Data player)
 {
-//    int num = cont->getPlayer_all().indexOf(player);
-//    if (num == -1)//if didn't been finded in all players (it will be yourself)
-//        this->pl_current.setPosition(cont->getPlayer_current().getX(), cont->getPlayer_current().getY());
-//    else if (num < cont->getPlayer_all().size())
-//        this->pl_all[num].setPosition(cont->getPlayer_all()[num].getX(), cont->getPlayer_all()[num].getY());
+    //    int num = cont->getPlayer_all().indexOf(player);
+    //    if (num == -1)//if didn't been finded in all players (it will be yourself)
+    //        this->pl_current.setPosition(cont->getPlayer_current().getX(), cont->getPlayer_current().getY());
+    //    else if (num < cont->getPlayer_all().size())
+    //        this->pl_all[num].setPosition(cont->getPlayer_all()[num].getX(), cont->getPlayer_all()[num].getY());
 }
 
 void Game_graphic::slot_update()
 {
-    clearEnemies();
     int size = cont->getPlayer_all().size();
-    for (int i = 0; i < size; i++)
+
+    if (size != this->getSizeOfEnemies())
     {
-        Data temp;
-        temp = cont->getPlayer_all()[i];
-        entities.push_back(new PLAYER(anim,
-                                      lvl,
-                                      temp.x,
-                                      temp.y,
-                                      temp.name,
-                                      temp.dx,
-                                      temp.dy,
-                                      temp.Health,
-                                      "Stay",
-                                      temp.dir,
-                                      temp.w,
-                                      temp.h)
-                           );
+        clearEnemies();
+        for (int i = 0; i < size; i++)
+        {
+            Data temp;
+            temp = cont->getPlayer_all()[i];
+            entities.push_back(new PLAYER(anim,
+                                          lvl,
+                                          temp.x,
+                                          temp.y,
+                                          temp.name,
+                                          temp.dx,
+                                          temp.dy,
+                                          temp.Health,
+                                          "Stay",
+                                          temp.dir,
+                                          temp.w,
+                                          temp.h)
+                               );
+        }
+    }
+    else
+    {
+        for (int i = 0; i < size; i++)
+        {
+            Entity* en = findEnemy(cont->getPlayer_all()[i].getName());
+            ((Data*)en)->operator =(cont->getPlayer_all()[i]);
+        }
     }
 }
 
@@ -305,7 +317,7 @@ void Game_graphic::clearEnemies()
     for(it=entities.begin();it!=entities.end();)
     {
         Entity *b = *it;
-        if (b->getType() == "Player" && b->getName() != cont->getPlayer_current().getName())
+        if (b->getType() == QString("Player") && b->getName() != cont->getPlayer_current().getName())
         {
             it  = entities.erase(it);
             delete b;
@@ -313,6 +325,30 @@ void Game_graphic::clearEnemies()
         else
             it++;
     }
+}
+
+int Game_graphic::getSizeOfEnemies()
+{
+    int size = 0;
+    for (it = entities.begin(); it != entities.end(); it++)
+    {
+        Entity *b = *it;
+        if (b->getType() == QString("Player") && b->getName() != cont->getPlayer_current().getName())
+            size++;
+    }
+    return size;
+}
+
+Entity *Game_graphic::findEnemy(QString name)
+{
+    Entity* temp = NULL;
+    for (it = entities.begin(); it != entities.end() && !temp; it++)
+    {
+        Entity *b = *it;
+        if (b->getType() == QString("Player") && b->getName() == name)
+            temp = b;
+    }
+    return temp;
 }
 
 //================================================================================================

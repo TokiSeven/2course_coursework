@@ -42,6 +42,8 @@ public slots:
 
 protected:
     void clearEnemies();
+    int getSizeOfEnemies();
+    Entity *findEnemy(QString name);
 
     //sfml
     void initialization();
@@ -53,7 +55,7 @@ protected:
 
     //db
     Container *cont;
-    QList<sf::RectangleShape> pl_all;
+    QList<PLAYER*> pl_all;
     sf::RectangleShape pl_current;
 
     //for window

@@ -42,6 +42,7 @@ void Container::deletePlayer(int num)
 
 void Container::updatePlayer(Data pl)
 {
+    qDebug() << pl.getName();
     int num = players.indexOf(pl);
     if (num != -1)
     {

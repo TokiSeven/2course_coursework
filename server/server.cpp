@@ -32,7 +32,7 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
 
     COMMAND cmd = Data::_CMD(cmd_qs);
 
-    qDebug() << QString("server >> NICK: ") + pl_name + QString("::") + cmd_qs;
+    //qDebug() << QString("server >> NICK: ") + pl_name + QString("::") + cmd_qs;
 
     if (cmd == _login)
     {
