@@ -31,6 +31,7 @@ public slots:
 
 private slots:
     void timeOut();
+    void slot_game_close_inside();
 
 protected:
     void check_data(QDataStream &, QHostAddress);

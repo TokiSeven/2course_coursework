@@ -8,16 +8,23 @@ Game_graphic::Game_graphic(Container *cont, QObject *parent)//constructor, set s
 
     this->windowHeight = 280;
     this->windowWidth = 450;
-    this->windowName = "Anime Fighting v 5.0";
+    this->windowName = "Anime Fighting v 6.5";
 
-    //connect(cont, SIGNAL(signal_update_all()), this, SLOT(slot_update()));
+    int FPS = 100;
+    this->TICK.setInterval(1000/FPS);
+    connect(&TICK, SIGNAL(timeout()), this, SLOT(slot_main_cycle()));
+
+    Ichigo = NULL;
+    view = NULL;
 }
 
 Game_graphic::~Game_graphic()//destructor
 {
-    //emit signal_closed();
-    //    if (this)
-    //        delete this;
+    if (Ichigo)
+        delete Ichigo;
+    if (view)
+        delete view;
+    entities.clear();
 }
 
 void Game_graphic::initialization()
@@ -49,8 +56,7 @@ void Game_graphic::initialization()
     music.setVolume(20);
 
     o = false;
-    spell = false;
-
+    //spell = false;
 }
 
 void Game_graphic::updatePlayersAll()
@@ -61,6 +67,8 @@ void Game_graphic::updatePlayersAll()
 
 void Game_graphic::main_cycle()//started every cycle of game
 {
+    if (Ichigo->Health <= 0)
+        Ichigo->Health = 100, Ichigo->x = 300, Ichigo->y = 100;
     float time = clock.getElapsedTime().asMicroseconds(); // время выполнения за 1 такт процессора
     clock.restart();
 
@@ -92,13 +100,41 @@ void Game_graphic::main_cycle()//started every cycle of game
     //            o=true;
     //        }
 
-    if(Ichigo->anim.animList["spell"].currentFrame >= 6 && Ichigo->anim.animList["spell"].currentFrame < 6.1 && !spell)
+    if(Ichigo->anim.animList["spell"].currentFrame >= 6 && Ichigo->anim.animList["spell"].currentFrame < 6.1 && !Ichigo->spell2)
     {
         entities.push_back(new Spell(anim2,lvl,Ichigo->x+25,Ichigo->y-60,Ichigo->dir,"Spell", 0.3, 0.0, 10, "move",anim2.animList[anim2.currentAnim].frames[anim2.animList[anim2.currentAnim].currentFrame].width,anim2.animList[anim2.currentAnim].frames[anim2.animList[anim2.currentAnim].currentFrame].height)); // добавление способности в массив объектов
-        spell = true;
+        Ichigo->spell2 = true;
     }
     if(Ichigo->anim.animList["spell"].currentFrame > 6.1)
-        spell = false;
+        Ichigo->spell2 = false;
+
+    for (it = entities.begin(); it != entities.end(); it++)
+    {
+        Entity *e = *it;
+        if (e->getType() == QString("Player"))
+        {
+            PLAYER *en = (PLAYER*)e;
+            if(en->anim.animList["spell"].currentFrame >= 6 && en->anim.animList["spell"].currentFrame < 6.1 && !en->spell2)
+            {
+                entities.push_back(new Spell(anim2,
+                                             lvl,
+                                             en->x+25,
+                                             en->y-60,
+                                             en->dir,
+                                             "Spell",
+                                             0.3,
+                                             0.0,
+                                             10,
+                                             "move",
+                                             anim2.animList[anim2.currentAnim].frames[anim2.animList[anim2.currentAnim].currentFrame].width,
+                        anim2.animList[anim2.currentAnim].frames[anim2.animList[anim2.currentAnim].currentFrame].height
+                        ));
+                en->spell2 = true;
+            }
+            if(en->anim.animList["spell"].currentFrame > 6.1)
+                en->spell2 = false;
+        }
+    }
 
 
     for(it=entities.begin();it!=entities.end();) // есои объект мертв, то удаляем из массива
@@ -110,7 +146,13 @@ void Game_graphic::main_cycle()//started every cycle of game
             it  = entities.erase(it);
             delete b;
         }
-        else it++;
+        else
+        {
+            if (b->getType() == "Player")
+                if (((PLAYER*)b)->anim.animList["spell"].currentFrame > 6.1)
+                    ((PLAYER*)b)->spell2 = false;
+            it++;
+        }
     }
 
 
@@ -170,6 +212,17 @@ void Game_graphic::main_cycle()//started every cycle of game
                                 player->x-=50;
                             else
                                 player->x+=50;
+                        }
+                        if(spell->getRect().intersects(Ichigo->getRect())) // если способность взаимодействует с врагом
+                        { // то пропадает и отнимает жизни
+                            spell->Health=0;
+                            Ichigo->Health-=20;
+                            Ichigo->hit = true;
+                            std::cout << spell->dir;
+                            if (spell->dir)
+                                Ichigo->x-=50;
+                            else
+                                Ichigo->x+=50;
                         }
                         for (std::list<Entity*>::iterator it3=entities.begin(); it3!=entities.end(); it3++)
                         {
@@ -241,37 +294,14 @@ void Game_graphic::game_start()//main function of game
 
     this->initialization();
 
-    while (window->isOpen())
-    {
-        this->updatePlayersAll();
+    this->TICK.start();
 
-        sf::Event event;
-        while (window->pollEvent(event))
-        {
-            events(event);
-        }
-
-        this->main_cycle();
-
-        window->clear();
-        this->draw();
-        window->display();
-    }
     emit signal_game_closed();
 }
 
 //================================================================================================
 //==========================================SLOTS(BEGIN)==========================================
 //================================================================================================
-void Game_graphic::slot_position(Data player)
-{
-    //    int num = cont->getPlayer_all().indexOf(player);
-    //    if (num == -1)//if didn't been finded in all players (it will be yourself)
-    //        this->pl_current.setPosition(cont->getPlayer_current().getX(), cont->getPlayer_current().getY());
-    //    else if (num < cont->getPlayer_all().size())
-    //        this->pl_all[num].setPosition(cont->getPlayer_all()[num].getX(), cont->getPlayer_all()[num].getY());
-}
-
 void Game_graphic::slot_update()
 {
     int size = cont->getPlayer_all().size();
@@ -316,17 +346,37 @@ void Game_graphic::slot_game_start()
 
 void Game_graphic::slot_close()
 {
-    emit signal_game_closed();
     this->window->close();
+    this->TICK.stop();
 }
 
 void Game_graphic::slot_keyPress(QString name, QString key)
 {
     Entity *ent = findEnemy(name);
-    if (ent)
+    if (ent != NULL)
     {
         PLAYER *en = (PLAYER*)ent;
         en->key[key.toStdString().c_str()] = true;
+    }
+}
+
+void Game_graphic::slot_main_cycle()
+{
+    if (window->isOpen())
+    {
+        this->updatePlayersAll();
+
+        sf::Event event;
+        while (window->pollEvent(event))
+        {
+            events(event);
+        }
+
+        this->main_cycle();
+
+        window->clear();
+        this->draw();
+        window->display();
     }
 }
 

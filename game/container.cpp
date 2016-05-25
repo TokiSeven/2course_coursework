@@ -20,8 +20,6 @@ Container::~Container()
 
 void Container::slot_game_close()
 {
-    //qDebug() << QString("Container-->> ") + "slot_game_close()";
-    emit signal_closed();
 }
 
 void Container::updatePlayers(QList<Data> players)

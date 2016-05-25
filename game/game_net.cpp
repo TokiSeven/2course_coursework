@@ -3,7 +3,6 @@
 Game_net::Game_net(Container *cont, QObject *parent)
     : network_main(cont->getServerPort(), cont->getPlayerPort(), parent)
 {
-    //-//qDebug() << QString("Game_net-->> ") + "Created.";
     this->cont = cont;
 
     this->socketListen();
@@ -12,7 +11,7 @@ Game_net::Game_net(Container *cont, QObject *parent)
     timer_server_answer.setInterval(3157);
     timer_answer.setInterval(2643);
 
-    connect(&timer_server_answer, SIGNAL(timeout()), this, SLOT(slot_game_close()));
+    connect(&timer_server_answer, SIGNAL(timeout()), this, SLOT(slot_game_close_inside()));
     connect(&timer_answer, SIGNAL(timeout()), this, SLOT(timeOut()));
     connect(&timer_sendPlayer, SIGNAL(timeout()), this, SLOT(slot_update()));
     connect(this, SIGNAL(connected()), &timer_sendPlayer, SLOT(start()));
@@ -21,11 +20,6 @@ Game_net::Game_net(Container *cont, QObject *parent)
 
 Game_net::~Game_net()
 {
-    //-//qDebug() << QString("Game_net-->> ") + "~Game_net()";
-    //this->cont->slot_game_close();
-    //emit signal_closed();
-    //    if (this)
-    //        delete this;
 }
 
 //                          =====================
@@ -65,10 +59,11 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
     in >> cmd_qs;
     COMMAND cmd = Data::_CMD(cmd_qs);
 
-    qDebug() << pl_name + "::" + Data::_CMD(cmd);
+    //qDebug() << pl_name + "::" + Data::_CMD(cmd);
 
     if (cmd == _update)
     {
+        timer_server_answer.start();
         Data pl;
         in >> pl;
         cont->updatePlayer(pl);
@@ -100,6 +95,7 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
     }
     else if (cmd == _keyboard)
     {
+        timer_server_answer.start();
         QString key;
         in >> key;
         emit signal_keyPressed(pl_name, key);
@@ -108,8 +104,9 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
 
 void Game_net::slot_game_close()
 {
-    //-//qDebug() << QString("Game_net-->> ") + "slot_game_close()";
-    //emit signal_closed();
+    this->timer_answer.stop();
+    this->timer_sendPlayer.stop();
+    this->timer_server_answer.stop();
 }
 
 void Game_net::slot_update()
@@ -144,7 +141,12 @@ void Game_net::connectToServer(const QString serv_ip, QString pl_name)
 
 void Game_net::timeOut()
 {
-    //-//qDebug() << QString("Game_net-->> ") + "timeOut()";
     timer_answer.stop();
     emit disconnected();
+}
+
+void Game_net::slot_game_close_inside()
+{
+    this->slot_game_close();
+    emit signal_closed();
 }

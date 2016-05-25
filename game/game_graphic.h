@@ -36,16 +36,17 @@ signals:
     void signal_keyPressed(QString key);
 
 public slots:
-    void slot_position(Data);
     void slot_update();
     void slot_game_start();
     void slot_close();
     void slot_keyPress(QString name, QString key);
+    void slot_main_cycle();
 
 protected:
     void clearEnemies();
     int getSizeOfEnemies();
     Entity *findEnemy(QString name);
+    QTimer TICK;
 
     //sfml
     void initialization();
@@ -78,7 +79,7 @@ protected:
     HealthBar healthBar; // полоска жизней
     Music music;
     bool o;
-    bool spell; // проверка одного нажатия
+    //bool spell; // проверка одного нажатия
     Clock clock; // часы
 };
 

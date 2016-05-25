@@ -133,7 +133,7 @@ void Server::sendPlayer(Data &pl)
     for (int i = 0; i < players.size(); i++)
         if (pl.getName() != players[i].getName())
         {
-            qDebug() << players[i].getIp().toString() + QString(" << ") + pl.getName();
+            //qDebug() << players[i].getIp().toString() + QString(" << ") + pl.getName();
             this->sendMessage(data, players[i].getIp());
         }
 }

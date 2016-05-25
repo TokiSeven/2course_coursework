@@ -12,10 +12,12 @@ public:
     std::map<std::string,bool> key; // нажатие клавиш
     SoundBuffer Abuf, HITbuf, Jbuf;
     Sound A, HIT, J;
+    bool spell2;
 
     PLAYER(AnimationManager &a, Level &lev,int x,int y, std::string name, float dx, float dy, int health, std::string first_anim, bool DIR, float W, float H)
         : Entity(a,x,y,name,dx,dy,health,first_anim,DIR,W,H)
     {
+        spell2 = false;
         this->type = "Player";
         STATE=stay;
         hit=false, spell=false, cattack=false, spellPush=false, cattackPush=false, jumpPush=false;

@@ -95,5 +95,5 @@ void MainWindow_connect::serverTimeout()
 
 void MainWindow_connect::slot_game_close()
 {
-    //qDebug() << QString("MainWindow_connect-->> ") + "slot_game_close()";
+    this->close();
 }
