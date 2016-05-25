@@ -49,6 +49,7 @@ void API::connect_Game_net()
     connect(game, SIGNAL(connected()), this, SLOT(slot_startGame()));
 
     connect(game, SIGNAL(disconnected()), this->getMainWindow(), SLOT(serverTimeout()));
+    connect(game, SIGNAL(disconnected()), this, SLOT(slot_gameClose()));
 
     connect(game, SIGNAL(nick_incorrect()), this->getMainWindow(), SLOT(answerFalse()));
 

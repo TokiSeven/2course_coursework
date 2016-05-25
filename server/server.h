@@ -21,13 +21,14 @@ signals:
 
 private slots:
     void checkWhoIsHere();//send on timer to all players and check their status
+    void slot_sendPlayersToAll(){this->sendPlayersToAll();}
 
 protected:
     void check_data(QDataStream&, QHostAddress);
 
 private:
     //need for resend to players
-    void sendPlayer(Data);//do it, if player doing something
+    void sendPlayer(Data&);//do it, if player doing something
     void sendPlayerWhoIsHere();//check all who offline
     void sendAuth(QHostAddress, bool);//send to ip that he auth
     void sendPlayersToAll();//send all players to all
@@ -37,7 +38,7 @@ private:
 
     QList<Data> players;//all players
 
-    QTimer timer_to_ask;//timer for sending to players message "who are here?"
+    QTimer timer_to_ask, timer_to_send_all;//timer for sending to players message "who are here?"
 };
 
 #endif // SERVER_H

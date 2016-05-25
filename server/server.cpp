@@ -9,6 +9,10 @@ Server::Server(QObject *parent, quint16 port_s, quint16 port_l)
 {
     this->timer_to_ask.setInterval(5000);
     this->timer_to_ask.start(5000);
+
+    this->timer_to_send_all.start(347);
+
+    connect(&timer_to_send_all, SIGNAL(timeout()), this, SLOT(slot_sendPlayersToAll()));
     connect(&timer_to_ask, SIGNAL(timeout()), this, SLOT(checkWhoIsHere()));
 }
 
@@ -32,7 +36,7 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
 
     COMMAND cmd = Data::_CMD(cmd_qs);
 
-    //qDebug() << QString("server >> NICK: ") + pl_name + QString("::") + cmd_qs;
+    //qDebug() << QString("server >> NICK: ") + pl_name + QString("::") + cmd_qs + QString("==") + ip.toString();
 
     if (cmd == _login)
     {
@@ -56,6 +60,7 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
             players[num].setIp(ip);
 
             sendPlayer(players[num]);
+            sendPlayersToAll();
             emit signal_newPlayer(players[num].getName());
         }
         return;
@@ -90,7 +95,7 @@ int Server::searchPlayer(QHostAddress address, QString pl_name)
 {
     int j = -1;
     for (int i = 0; i < players.size() && j == -1; i++)
-        if (players[i].getIp() == address && players[i].getName() == pl_name)
+        if (/*players[i].getIp() == address && */players[i].getName() == pl_name)
             j = i;
     return j;
 }
@@ -110,7 +115,7 @@ bool Server::checkAuth(const QString login)
 //============================================
 //                          <<__SENDING PLAYER
 //============================================
-void Server::sendPlayer(Data pl)
+void Server::sendPlayer(Data &pl)
 {
     QByteArray data;
     QDataStream out(&data, QIODevice::WriteOnly);
@@ -121,7 +126,10 @@ void Server::sendPlayer(Data pl)
 
     for (int i = 0; i < players.size(); i++)
         if (pl.getName() != players[i].getName())
+        {
+            qDebug() << players[i].getIp().toString() + QString(" << ") + pl.getName();
             this->sendMessage(data, players[i].getIp());
+        }
 }
 
 //====================================================
@@ -131,7 +139,7 @@ void Server::checkWhoIsHere()
 {
     if (this->getStatus())
     {
-        qDebug() << "CYCLE FOR PLAYERS TO DELETE OR NOT THEM";
+        //qDebug() << "CYCLE FOR PLAYERS TO DELETE OR NOT THEM";
         //delete all, who before this did not ask that he is online
         int size = players.size();
         for (int i = 0; i < players.size();)
@@ -169,6 +177,8 @@ void Server::sendAuth(QHostAddress addr, bool flag)
     out << Data::_CMD(_login);
     out << str;
 
+    qDebug() << QString("auth ") + addr.toString();
+
     this->sendMessage(data, addr);
 }
 
@@ -177,13 +187,20 @@ void Server::sendAuth(QHostAddress addr, bool flag)
 //================================================================
 void Server::sendPlayersToAll()
 {
-    QByteArray data;
-    QDataStream out(&data, QIODevice::WriteOnly);
-
-    out << QString::fromStdString("SERVER");
-    out << Data::_CMD(_players);
-    out << this->players;
-
     for (int i = 0; i < players.size(); i++)
+    {
+        QList<Data> plrs;
+        plrs.append(players);
+        plrs.removeAt(i);
+
+        QByteArray data;
+        QDataStream out(&data, QIODevice::WriteOnly);
+
+        out << QString::fromStdString("SERVER");
+        out << Data::_CMD(_players);
+        out << plrs;
+
+        qDebug() << players[i].getIp().toString() + QString(" << ---ALL---");
         this->sendMessage(data, players[i].getIp());
+    }
 }

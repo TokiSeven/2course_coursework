@@ -53,7 +53,7 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
     in >> cmd_qs;
     COMMAND cmd = Data::_CMD(cmd_qs);
 
-    //qDebug() << pl_name + "::" + Data::_CMD(cmd);
+    qDebug() << pl_name + "::" + Data::_CMD(cmd);
 
     if (cmd == _update)
     {
