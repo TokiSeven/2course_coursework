@@ -68,22 +68,29 @@ void Game_graphic::main_cycle()//started every cycle of game
 
     if (time > 40) time = 40;
 
-    // нажатие клавиш
-    if (Keyboard::isKeyPressed(Keyboard::Left)) Ichigo->key["L"]=true;
-    if (Keyboard::isKeyPressed(Keyboard::Right)) Ichigo->key["R"]=true;
-    if (Keyboard::isKeyPressed(Keyboard::Up)) Ichigo->key["Up"]=true;
-    if (Keyboard::isKeyPressed(Keyboard::Down)) Ichigo->key["Down"]=true;
-    if (Keyboard::isKeyPressed(Keyboard::Space)) Ichigo->key["Space"]=true;
-    if (Keyboard::isKeyPressed(Keyboard::C)) Ichigo->key["C"]=true;
-    if (Keyboard::isKeyPressed(Keyboard::V)) Ichigo->key["V"]=true;
-    if (Keyboard::isKeyPressed(Keyboard::B)) Ichigo->key["B"]=true;
+    // >>>------------------------------------->>>FOR KEYBOARD<<<--------------------------------------<<<
+    // >>>----------------------------------------->>>BEGIN<<<-----------------------------------------<<<
+    QString keyPress;
+    keyPress.clear();
+    if (Keyboard::isKeyPressed(Keyboard::Left)) Ichigo->key["L"]=true, keyPress = "L";
+    if (Keyboard::isKeyPressed(Keyboard::Right)) Ichigo->key["R"]=true, keyPress = "R";
+    if (Keyboard::isKeyPressed(Keyboard::Up)) Ichigo->key["Up"]=true, keyPress = "Up";
+    if (Keyboard::isKeyPressed(Keyboard::Down)) Ichigo->key["Down"]=true, keyPress = "Down";
+    if (Keyboard::isKeyPressed(Keyboard::Space)) Ichigo->key["Space"]=true, keyPress = "Space";
+    if (Keyboard::isKeyPressed(Keyboard::C)) Ichigo->key["C"]=true, keyPress = "C";
+    if (Keyboard::isKeyPressed(Keyboard::V)) Ichigo->key["V"]=true, keyPress = "V";
+    if (Keyboard::isKeyPressed(Keyboard::B)) Ichigo->key["B"]=true, keyPress = "B";
+    if (!keyPress.isEmpty())
+        emit signal_keyPressed(keyPress);
+    // >>>------------------------------------->>>FOR KEYBOARD<<<--------------------------------------<<<
+    // >>>---------------------------------------->>>FINISH<<<-----------------------------------------<<<
 
-    if(Keyboard::isKeyPressed(Keyboard::O))
-        if(!o)
-        {
-            entities.push_back(new PLAYER(anim, lvl, 700, 500,"Player",0.0,0.0,100,"stay",0,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].width,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].height));
-            o=true;
-        }
+    //    if(Keyboard::isKeyPressed(Keyboard::O))
+    //        if(!o)
+    //        {
+    //            entities.push_back(new PLAYER(anim, lvl, 700, 500,"Player",0.0,0.0,100,"stay",0,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].width,anim.animList[anim.currentAnim].frames[anim.animList[anim.currentAnim].currentFrame].height));
+    //            o=true;
+    //        }
 
     if(Ichigo->anim.animList["spell"].currentFrame >= 6 && Ichigo->anim.animList["spell"].currentFrame < 6.1 && !spell)
     {
@@ -296,7 +303,8 @@ void Game_graphic::slot_update()
         for (int i = 0; i < size; i++)
         {
             Entity* en = findEnemy(cont->getPlayer_all()[i].getName());
-            ((Data*)en)->operator =(cont->getPlayer_all()[i]);
+            if (en)
+                ((Data*)en)->operator =(cont->getPlayer_all()[i]);
         }
     }
 }
@@ -310,6 +318,16 @@ void Game_graphic::slot_close()
 {
     emit signal_game_closed();
     this->window->close();
+}
+
+void Game_graphic::slot_keyPress(QString name, QString key)
+{
+    Entity *ent = findEnemy(name);
+    if (ent)
+    {
+        PLAYER *en = (PLAYER*)ent;
+        en->key[key.toStdString().c_str()] = true;
+    }
 }
 
 void Game_graphic::clearEnemies()

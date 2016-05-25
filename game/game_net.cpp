@@ -43,6 +43,18 @@ void Game_net::sendPlayer()
     this->sendMessage(data, cont->getServerIp());
 }
 
+void Game_net::sendKey(QString key)
+{
+    QByteArray data;
+    QDataStream out(&data, QIODevice::WriteOnly);
+
+    out << cont->getPlayer_current().getName();
+    out << Data::_CMD(_keyboard);
+    out << key;
+
+    this->sendMessage(data, cont->getServerIp());
+}
+
 //                          ==================
 //                          <<__CHECK DATAGRAM
 //                          ==================
@@ -86,6 +98,12 @@ void Game_net::check_data(QDataStream &in, QHostAddress IP)
             emit nick_incorrect();
         }
     }
+    else if (cmd == _keyboard)
+    {
+        QString key;
+        in >> key;
+        emit signal_keyPressed(pl_name, key);
+    }
 }
 
 void Game_net::slot_game_close()
@@ -102,6 +120,11 @@ void Game_net::slot_update()
 void Game_net::slot_connect(QString nick, QString server)
 {
     this->connectToServer(server, nick);
+}
+
+void Game_net::slot_keyPress(QString key)
+{
+    this->sendKey(key);
 }
 
 void Game_net::connectToServer(const QString serv_ip, QString pl_name)

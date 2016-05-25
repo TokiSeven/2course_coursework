@@ -33,12 +33,14 @@ public:
 signals:
     void signal_update();
     void signal_game_closed();
+    void signal_keyPressed(QString key);
 
 public slots:
     void slot_position(Data);
     void slot_update();
     void slot_game_start();
     void slot_close();
+    void slot_keyPress(QString name, QString key);
 
 protected:
     void clearEnemies();

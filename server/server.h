@@ -32,6 +32,7 @@ private:
     void sendPlayerWhoIsHere();//check all who offline
     void sendAuth(QHostAddress, bool);//send to ip that he auth
     void sendPlayersToAll();//send all players to all
+    void sendKey(QString, QString);
 
     bool checkAuth(const QString);//check authorization
     int searchPlayer(QHostAddress, QString);//search player by ip and name and return his number in list

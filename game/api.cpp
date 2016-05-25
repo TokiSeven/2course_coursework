@@ -54,6 +54,8 @@ void API::connect_Game_net()
     connect(game, SIGNAL(nick_incorrect()), this->getMainWindow(), SLOT(answerFalse()));
 
     connect(game, SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
+
+    connect(game, SIGNAL(signal_keyPressed(QString,QString)), this->getGameGraphics(), SLOT(slot_keyPress(QString,QString)));
 }
 
 void API::connect_Game_graphic()
@@ -63,6 +65,8 @@ void API::connect_Game_graphic()
     connect(game, SIGNAL(signal_game_closed()), this, SLOT(slot_gameClose()));
     connect(game, SIGNAL(signal_game_closed()), this->getMainWindow(), SLOT(game_closed()));
     connect(game, SIGNAL(signal_game_closed()), this->getGameNetwork(), SLOT(slot_game_close()));
+
+    connect(game, SIGNAL(signal_keyPressed(QString)), this->getGameNetwork(), SLOT(slot_keyPress(QString)));
 }
 
 void API::connect_Container()

@@ -21,11 +21,13 @@ signals:
     void connected();
     void disconnected();
     void nick_incorrect();
+    void signal_keyPressed(QString name, QString key);
 
 public slots:
     void slot_game_close();
     void slot_update();
     void slot_connect(QString nick, QString server);
+    void slot_keyPress(QString key);
 
 private slots:
     void timeOut();
@@ -35,6 +37,7 @@ protected:
 
 private:
     void sendPlayer();//do it, if player move
+    void sendKey(QString key);
 
     int searchPlayer(QHostAddress, QString);
 

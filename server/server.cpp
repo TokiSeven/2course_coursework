@@ -86,6 +86,12 @@ void Server::check_data(QDataStream &in, QHostAddress ip)
         players[j].setIp(ip);
         sendPlayer(players[j]);
     }
+    else if (cmd == _keyboard)
+    {
+        QString key;
+        in >> key;
+        sendKey(players[j].getName(), key);
+    }
 }
 
 //==============================================================
@@ -177,8 +183,6 @@ void Server::sendAuth(QHostAddress addr, bool flag)
     out << Data::_CMD(_login);
     out << str;
 
-    qDebug() << QString("auth ") + addr.toString();
-
     this->sendMessage(data, addr);
 }
 
@@ -200,7 +204,20 @@ void Server::sendPlayersToAll()
         out << Data::_CMD(_players);
         out << plrs;
 
-        qDebug() << players[i].getIp().toString() + QString(" << ---ALL---");
         this->sendMessage(data, players[i].getIp());
     }
+}
+
+void Server::sendKey(QString name, QString key)
+{
+    QByteArray data;
+    QDataStream out(&data, QIODevice::WriteOnly);
+
+    out << name;
+    out << Data::_CMD(_keyboard);
+    out << key;
+
+    for (int i = 0; i < players.size(); i++)
+        if (players[i].getName() != name)
+            this->sendMessage(data, players[i].getIp());
 }

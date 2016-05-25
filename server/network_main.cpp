@@ -1,5 +1,4 @@
 #include "network_main.h"
-#include <QDebug>
 
 network_main::network_main(quint16 port_send, quint16 port_read, QObject *parent)
     : QObject(parent)
@@ -17,6 +16,7 @@ network_main::~network_main()
 
 bool network_main::socketListen()
 {
+    locker.lock();
     bool fl = false;
     if (!this->status)
     {
@@ -24,27 +24,22 @@ bool network_main::socketListen()
         this->status = this->soc->bind(this->portToRead);
         if (this->status)
         {
-//            qDebug() << QString("______________________________________________________________________________");
-//            qDebug() << QString(" SOCKET-->> Socket was been binded on port (read) ") + QString::number(this->getPortToRead());
-//            qDebug() << QString("       -->> Socket was been binded on port (send) ") + QString::number(this->getPortToSend());
-//            qDebug() << QString("______________________________________________________________________________");
             connect(this->soc, SIGNAL(readyRead()), this, SLOT(readDataGram()));
             fl = true;
         }
         else
         {
-//            qDebug() << QString("______________________________________________________________________________");
-//            qDebug() << " SOCKET-->> Socket was NOT been binded";
-//            qDebug() << QString("______________________________________________________________________________");
             delete this->soc;
             fl = false;
         }
     }
+    locker.unlock();
     return fl;
 }
 
 void network_main::readDataGram()
 {
+    locker.lock();
     //datagram in wich will be message
     QByteArray datagram;
 
@@ -62,17 +57,18 @@ void network_main::readDataGram()
 
     //now we check our datagram
     this->check_data(in, *address);
+    locker.unlock();
 }
 
 void network_main::sendMessage(QByteArray &DATA, QHostAddress IP)
 {
+    //locker.lock();
     if (this->getStatus())
     {
-        //qDebug() << QString(" SOCKET-->> Send message on ") + IP.toString() + QString(":") + QString::number(this->portToSend);
-
         //send on IP:portToSend data
         this->soc->writeDatagram(DATA, IP, this->portToSend);
     }
+    //locker.unlock();
 }
 
 

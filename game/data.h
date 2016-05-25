@@ -6,7 +6,14 @@
 #include <QHostAddress>
 #include <QDataStream>
 
-enum COMMAND {_online, _update, _login, _connected, _disconnected, _error, _players};
+enum COMMAND {_online,
+              _update,
+              _login,
+              _connected,
+              _disconnected,
+              _error,
+              _players,
+              _keyboard};
 
 class Data
 {
@@ -155,6 +162,8 @@ public:
             ret = "_login";
         else if (cmd == _players)
             ret = "_players";
+        else if (cmd == _keyboard)
+            ret = "_keyboard";
         else
             ret = "_error";
 
@@ -173,6 +182,8 @@ public:
             ret = _login;
         else if (cmd == QString::fromStdString("_players"))
             ret = _players;
+        else if (cmd == QString::fromStdString("_keyboard"))
+            ret = _keyboard;
         else
             ret = _error;
 
