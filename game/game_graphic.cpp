@@ -8,7 +8,7 @@ Game_graphic::Game_graphic(Container *cont, QObject *parent)//constructor, set s
 
     this->windowHeight = 280;
     this->windowWidth = 450;
-    this->windowName = "Anime Fighting v7.0";
+    this->windowName = "Anime Fighting v7.3";
 
     this->TICK.setInterval(10);
     connect(&TICK, SIGNAL(timeout()), this, SLOT(slot_main_cycle()));
@@ -338,7 +338,8 @@ void Game_graphic::game_start()//main function of game
 
 void Game_graphic::slot_update()
 {
-    int size = cont->getPlayer_all().size();
+    //int size = cont->getPlayer_all().size();
+    int size = this->cont->getPlayersSize();
 
     if (size != this->getSizeOfEnemies())
     {

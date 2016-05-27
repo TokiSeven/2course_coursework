@@ -22,8 +22,8 @@ void Container::slot_game_close()
 
 void Container::updatePlayers(QList<Data> players)
 {
-    players.clear();
-    players.append(players);
+    this->players.clear();
+    this->players.append(players);
     emit signal_update_all();
 }
 

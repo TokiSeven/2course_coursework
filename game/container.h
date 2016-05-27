@@ -20,6 +20,7 @@ public:
 
     void setServerIp(QHostAddress);
 
+    inline int getPlayersSize()const{return this->players.size();}
     inline QList<Data> getPlayer_all()const{return this->players;}
     inline QList<Data>* getPlayer_all_pointer(){return &this->players;}
     inline Data getPlayer_current()const{return this->pl;}
