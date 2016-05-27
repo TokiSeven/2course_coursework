@@ -310,7 +310,7 @@ void Game_graphic::events(sf::Event &event)//when something was done (for exampl
     if (event.type == sf::Event::Closed)
     {
         emit signal_game_closed();
-        //this->slot_close();
+        this->slot_close();
     }
 }
 
@@ -425,21 +425,26 @@ void Game_graphic::slot_keyPress(QString name, QString key)
 
 void Game_graphic::slot_main_cycle()
 {
-    if (window->isOpen())
+    if (wasStarted)
     {
-        this->updatePlayersAll();
-
-        sf::Event event;
-        while (window->pollEvent(event))
+        if (window->isOpen())
         {
-            events(event);
+            this->updatePlayersAll();
+
+            sf::Event event;
+            while (window->pollEvent(event))
+            {
+                events(event);
+                if (!wasStarted)
+                    return;
+            }
+
+            this->main_cycle();
+
+            window->clear();
+            this->draw();
+            window->display();
         }
-
-        this->main_cycle();
-
-        window->clear();
-        this->draw();
-        window->display();
     }
 }
 

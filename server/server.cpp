@@ -7,8 +7,8 @@
 Server::Server(QObject *parent, quint16 port_s, quint16 port_l)
     : network_main(port_l, port_s, parent)
 {
-    this->timer_to_ask.setInterval(5000);
-    this->timer_to_ask.start(5000);
+    this->timer_to_ask.setInterval(2500);
+    this->timer_to_ask.start();
 
     this->timer_to_send_all.start(347);
 

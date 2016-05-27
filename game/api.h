@@ -28,7 +28,6 @@ signals:
 private slots:
     void slot_startGame();
     void slot_gameClose();
-    void slot_refreshGame();
 
 protected:
     //for data

@@ -50,11 +50,8 @@ void API::slot_gameClose()
         this->getGameNetwork()->slot_game_close();
         this->getGameContainer()->slot_game_close();
         this->getMainWindow()->game_closed();
+        isGame = false;
     }
-}
-
-void API::slot_refreshGame()
-{
 }
 
 void API::connect_Game_net()

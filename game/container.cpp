@@ -14,8 +14,6 @@ Container::Container(QString pl_name, QHostAddress s_ip, quint16 s_port, quint16
 
 Container::~Container()
 {
-    //qDebug() << QString("Container-->> ") + "~Container()";
-    //emit signal_closed();
 }
 
 void Container::slot_game_close()
