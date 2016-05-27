@@ -5,7 +5,6 @@
 #include <QUdpSocket>
 #include <QDataStream>
 #include <QHostAddress>
-#include <QMutex>
 
 class network_main : public QObject
 {
@@ -30,7 +29,6 @@ protected:
     virtual void check_data(QDataStream&, QHostAddress){}//check data from this QDataStream and this ip-address
     void sendMessage(QByteArray &DATA, QHostAddress IP);//send message from DATA to IP
 
-    QMutex locker;
     QUdpSocket *soc;
     bool status;
 

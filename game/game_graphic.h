@@ -43,6 +43,8 @@ public slots:
     void slot_main_cycle();
 
 protected:
+    bool wasStarted;
+
     void clearEnemies();
     int getSizeOfEnemies();
     Entity *findEnemy(QString name);

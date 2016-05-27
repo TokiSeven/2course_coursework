@@ -16,7 +16,6 @@ network_main::~network_main()
 
 bool network_main::socketListen()
 {
-    locker.lock();
     bool fl = false;
     if (!this->status)
     {
@@ -33,13 +32,11 @@ bool network_main::socketListen()
             fl = false;
         }
     }
-    locker.unlock();
     return fl;
 }
 
 void network_main::readDataGram()
 {
-    locker.lock();
     //datagram in wich will be message
     QByteArray datagram;
 
@@ -57,7 +54,6 @@ void network_main::readDataGram()
 
     //now we check our datagram
     this->check_data(in, *address);
-    locker.unlock();
 }
 
 void network_main::sendMessage(QByteArray &DATA, QHostAddress IP)

@@ -3,19 +3,20 @@
 API::API(QObject *parent) : QObject(parent)
 {
     this->mw = new MainWindow_connect();
+    this->cont = new Container(QString("NoName"), QHostAddress("127.0.0.1"), 1100, 2200, (QObject*)this);
+    this->game_net = new Game_net(cont, (QObject*)this);
+    this->game_graph = new Game_graphic(cont);
 
-    this->cont = NULL;
-    this->game_net = NULL;
-    this->game_graph = NULL;
+    isGame = false;
 
-    slot_refreshGame();
+    this->connect_all();
 }
 
 API::~API()
 {
-    delete this->cont;
     delete this->game_graph;
     delete this->game_net;
+    delete this->cont;
     delete this->mw;
 }
 
@@ -29,7 +30,11 @@ void API::startGame()
     //    connect(game_graph, SIGNAL(signal_game_closed()), thread, SLOT(quit()));
     //    connect(thread, SIGNAL(finished()), thread, SLOT(deleteLater()));
     //    thread->start();
-    game_graph->slot_game_start();
+    if (!isGame)
+    {
+        game_graph->slot_game_start();
+        isGame = true;
+    }
 }
 
 void API::slot_startGame()
@@ -39,22 +44,17 @@ void API::slot_startGame()
 
 void API::slot_gameClose()
 {
+    if (isGame)
+    {
+        this->getGameGraphics()->slot_close();
+        this->getGameNetwork()->slot_game_close();
+        this->getGameContainer()->slot_game_close();
+        this->getMainWindow()->game_closed();
+    }
 }
 
 void API::slot_refreshGame()
 {
-    if (cont)
-        delete cont;
-    if (game_net)
-        delete game_net;
-    if (game_graph)
-        delete game_graph;
-
-    this->cont = new Container(QString("NoName"), QHostAddress("127.0.0.1"), 1100, 2200, (QObject*)this);
-    this->game_net = new Game_net(cont, (QObject*)this);
-    this->game_graph = new Game_graphic(cont);
-
-    this->connect_all();
 }
 
 void API::connect_Game_net()
@@ -66,16 +66,10 @@ void API::connect_Game_net()
 
     connect(game, SIGNAL(disconnected()), this, SLOT(slot_gameClose()));
     connect(game, SIGNAL(disconnected()), this->getMainWindow(), SLOT(serverTimeout()));
-    connect(game, SIGNAL(disconnected()), this->getGameContainer(), SLOT(slot_game_close()));
-    connect(game, SIGNAL(disconnected()), this->getGameGraphics(), SLOT(slot_close()));
 
     connect(game, SIGNAL(nick_incorrect()), this->getMainWindow(), SLOT(answerFalse()));
 
     connect(game, SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
-    connect(game, SIGNAL(signal_closed()), this->getMainWindow(), SLOT(serverTimeout()));
-    connect(game, SIGNAL(signal_closed()), this->getGameContainer(), SLOT(slot_game_close()));
-    connect(game, SIGNAL(signal_closed()), this->getGameGraphics(), SLOT(slot_close()));
-    connect(game, SIGNAL(signal_closed()), this, SLOT(slot_refreshGame()));
 
     connect(game, SIGNAL(signal_keyPressed(QString,QString)), this->getGameGraphics(), SLOT(slot_keyPress(QString,QString)));
 }
@@ -85,9 +79,6 @@ void API::connect_Game_graphic()
     Game_graphic *game = this->getGameGraphics();
 
     connect(game, SIGNAL(signal_game_closed()), this, SLOT(slot_gameClose()));
-    connect(game, SIGNAL(signal_game_closed()), this->getMainWindow(), SLOT(game_closed()));
-    connect(game, SIGNAL(signal_game_closed()), this->getGameNetwork(), SLOT(slot_game_close()));
-    connect(game, SIGNAL(signal_game_closed()), this->getGameContainer(), SLOT(slot_game_close()));
 
     connect(game, SIGNAL(signal_keyPressed(QString)), this->getGameNetwork(), SLOT(slot_keyPress(QString)));
 }
@@ -101,9 +92,6 @@ void API::connect_Container()
     connect(cont, SIGNAL(signal_update_all()), this->getGameGraphics(), SLOT(slot_update()));
 
     connect(cont, SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
-    connect(cont, SIGNAL(signal_closed()), this->getGameGraphics(), SLOT(slot_close()));
-    connect(cont, SIGNAL(signal_closed()), this->getGameNetwork(), SLOT(slot_game_close()));
-    connect(cont, SIGNAL(signal_closed()), this->getMainWindow(), SLOT(slot_game_close()));
 }
 
 void API::connect_MainWindow_connect()
@@ -113,9 +101,6 @@ void API::connect_MainWindow_connect()
     connect(launcher, SIGNAL(signal_button_connect(QString, QString)), this->getGameNetwork(), SLOT(slot_connect(QString, QString)));
 
     connect(launcher, SIGNAL(signal_closed()), this, SLOT(slot_gameClose()));
-    connect(launcher, SIGNAL(signal_closed()), this->getGameContainer(), SLOT(slot_game_close()));
-    connect(launcher, SIGNAL(signal_closed()), this->getGameGraphics(), SLOT(slot_close()));
-    connect(launcher, SIGNAL(signal_closed()), this->getGameNetwork(), SLOT(slot_game_close()));
 }
 
 void API::connect_Player_Current()

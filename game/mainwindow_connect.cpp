@@ -21,7 +21,7 @@ MainWindow_connect::~MainWindow_connect()
 void MainWindow_connect::game_closed()
 {
     //qDebug() << QString("MainWindow_connect-->> ") + "game_closed";
-    ui->label_status->setText(QString::fromStdString("Game closed. You can try again."));
+    ui->label_status->setText(QString::fromStdString("Game closed. Try again."));
     ui->line_nick->setEnabled(true);
     ui->button_connect->setEnabled(true);
 }
@@ -76,7 +76,7 @@ void MainWindow_connect::on_button_connect_clicked()
 void MainWindow_connect::answerFalse()
 {
     //qDebug() << QString("MainWindow_connect-->> ") + "answerFalse()";
-    ui->label_status->setText(QString::fromStdString("Some errors. Please write other nickname or ip address of server."));
+    ui->label_status->setText(QString::fromStdString("Please write other nickname."));
 }
 
 void MainWindow_connect::answerTrue()
@@ -90,7 +90,7 @@ void MainWindow_connect::answerTrue()
 void MainWindow_connect::serverTimeout()
 {
     //qDebug() << QString("MainWindow_connect-->> ") + "serverTimeout()";
-    ui->label_status->setText(QString::fromStdString("Server don't response. Please, try again or write other server ip."));
+    ui->label_status->setText(QString::fromStdString("Server doesn't response."));
 }
 
 void MainWindow_connect::slot_game_close()

@@ -39,6 +39,9 @@ protected:
     void connect_Player_Current();
     void connect_all();
 
+    //for game too
+    bool isGame;
+
     //for game
     Game_net *game_net;
     Game_graphic *game_graph;
